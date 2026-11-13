@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin | CliffCoches.Net</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Cargamos Supabase con un enlace UMD directo y seguro -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
   <style>
     :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #111; --white: #fff; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -13,37 +14,51 @@
     h1 { text-align: center; margin-bottom: 30px; color: var(--gold); }
     input { width: 100%; padding: 14px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 6px; }
     button { width: 100%; padding: 14px; background: var(--gold); color: black; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    .error { color: #ff6b6b; text-align: center; margin-top: 15px; min-height: 20px; }
+    .error { color: #ff6b6b; text-align: center; margin-top: 15px; min-height: 20px; font-size: 0.95rem; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>CliffCoches Admin</h1>
-    <input type="email" id="email" placeholder="Email" />
+    <input type="email" id="email" placeholder="Email" value="bololoistefan7@gmail.com" />
     <input type="password" id="password" placeholder="Contraseña" />
-    <button onclick="login()">Entrar</button>
+    <button type="button" onclick="hacerLogin()">Entrar</button>
     <div id="error" class="error"></div>
   </div>
 
   <script>
-    const supabase = window.supabase.createClient(
-      'https://axeolovhcpqcubkachez.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
-    );
+    // Inicialización directa con la librería global de Supabase
+    const SUPABASE_URL = 'https://axeolovhcpqcubkachez.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw';
+    
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function login() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    async function hacerLogin() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
       const errorDiv = document.getElementById('error');
-      errorDiv.textContent = 'Entrando...';
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      
-      if (error) {
-        errorDiv.textContent = 'Error: ' + error.message;
-      } else {
-        errorDiv.textContent = '¡Correcto! Redirigiendo...';
-        window.location.href = 'admin.html';
+      if (!email || !password) {
+        errorDiv.textContent = 'Por favor, escribe el email y la contraseña.';
+        return;
+      }
+
+      errorDiv.textContent = 'Conectando...';
+
+      try {
+        const { data, error } = await db.auth.signInWithPassword({ 
+          email: email, 
+          password: password 
+        });
+        
+        if (error) {
+          errorDiv.textContent = 'Error: ' + error.message;
+        } else {
+          errorDiv.textContent = '¡Acceso concedido! Redirigiendo...';
+          window.location.href = 'admin.html';
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Error inesperado: ' + err.message;
       }
     }
   </script>
