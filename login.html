@@ -13,12 +13,10 @@
     h1 { text-align: center; margin-bottom: 25px; color: var(--gold); font-size: 1.6rem; font-family: 'Playfair Display', serif; }
     
     .input-group { position: relative; margin-bottom: 15px; }
-    input[type="email"], input[type="password"], input[type="text"] { width: 100%; padding: 14px 50px 14px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
+    input { width: 100%; padding: 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
     
-    /* Botón Ver/Ocultar integrado a la derecha dentro del campo */
-    .toggle-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--gold); padding: 6px 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; border-radius: 4px; }
-    .toggle-btn:hover { background: rgba(212, 175, 55, 0.1); }
+    .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.1rem; }
     
     .remember-container { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
     .remember-container input { width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
@@ -34,12 +32,12 @@
     <h1>CliffCoches Admin</h1>
     
     <div class="input-group">
-      <input type="email" id="email" placeholder="Correo electrónico" autocomplete="email" />
+      <input type="email" id="email" placeholder="Correo electrónico" />
     </div>
     
     <div class="input-group">
-      <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
-      <button type="button" class="toggle-btn" id="eyeBtn" onclick="togglePassword()">Ver</button>
+      <input type="password" id="password" placeholder="Contraseña" />
+      <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
     </div>
 
     <label class="remember-container">
@@ -62,6 +60,7 @@
       }
     );
 
+    // Al cargar la página, comprobamos si ya hay sesión abierta o si hay datos guardados
     async function checkExistingSession() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
@@ -69,6 +68,7 @@
         return;
       }
 
+      // Rellenar si guardó datos previamente
       const savedEmail = localStorage.getItem('cliff_email');
       const savedPass = localStorage.getItem('cliff_pass');
       if (savedEmail && savedPass) {
@@ -81,14 +81,10 @@
 
     function togglePassword() {
       const passInput = document.getElementById('password');
-      const eyeBtn = document.getElementById('eyeBtn');
-      
       if (passInput.type === 'password') {
         passInput.type = 'text';
-        eyeBtn.textContent = 'Ocultar';
       } else {
         passInput.type = 'password';
-        eyeBtn.textContent = 'Ver';
       }
     }
 
@@ -110,6 +106,7 @@
       if (error) {
         errorDiv.textContent = 'Error: ' + error.message;
       } else {
+        // Guardar o borrar credenciales según la casilla
         if (remember) {
           localStorage.setItem('cliff_email', email);
           localStorage.setItem('cliff_pass', password);
