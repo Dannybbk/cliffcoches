@@ -12,16 +12,13 @@
     .container { width: 100%; max-width: 420px; background: var(--dark); padding: 35px; border-radius: 12px; border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     h1 { text-align: center; margin-bottom: 25px; color: var(--gold); font-size: 1.6rem; font-family: 'Playfair Display', serif; }
     
-    .input-group { margin-bottom: 15px; }
-    input { width: 100%; padding: 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
+    .input-group { position: relative; margin-bottom: 15px; }
+    input[type="email"], input[type="password"], input[type="text"] { width: 100%; padding: 14px 50px 14px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
     
-    .password-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
-    .password-row input { margin-bottom: 0; flex: 1; }
-    
-    /* Botón optimizado para toque directo en móvil */
-    .toggle-btn { background: #1c1c1c; border: 1px solid #333; color: var(--gold); padding: 0 16px; height: 50px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.3s; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
-    .toggle-btn:hover { background: rgba(212, 175, 55, 0.1); border-color: var(--gold); }
+    /* Botón Ver/Ocultar integrado a la derecha dentro del campo */
+    .toggle-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--gold); padding: 6px 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; border-radius: 4px; }
+    .toggle-btn:hover { background: rgba(212, 175, 55, 0.1); }
     
     .remember-container { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
     .remember-container input { width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
@@ -40,8 +37,7 @@
       <input type="email" id="email" placeholder="Correo electrónico" autocomplete="email" />
     </div>
     
-    <div class="password-row">
-      <!-- Usamos onmousedown / ontouchstart para que responda al instante al tocar -->
+    <div class="input-group">
       <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
       <button type="button" class="toggle-btn" id="eyeBtn" onclick="togglePassword()">Ver</button>
     </div>
@@ -83,7 +79,6 @@
     }
     checkExistingSession();
 
-    // Función global directa y súper sencilla
     function togglePassword() {
       const passInput = document.getElementById('password');
       const eyeBtn = document.getElementById('eyeBtn');
