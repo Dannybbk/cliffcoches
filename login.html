@@ -16,13 +16,12 @@
     input { width: 100%; padding: 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
     
-    /* Contenedor contraseña + botón al lado */
+    /* Fila de contraseña con botón de texto limpio al lado */
     .password-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
-    .password-row input { margin-bottom: 0; }
+    .password-row input { margin-bottom: 0; flex: 1; }
     
-    /* Botón independiente fuera del input para que Chrome no lo bloquee */
-    .toggle-btn { background: #1c1c1c; border: 1px solid #333; color: var(--white); padding: 0 16px; height: 50px; border-radius: 8px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; }
-    .toggle-btn:hover { border-color: var(--gold); }
+    .toggle-btn { background: #1c1c1c; border: 1px solid #333; color: var(--gold); padding: 0 16px; height: 50px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.3s; flex-shrink: 0; }
+    .toggle-btn:hover { background: rgba(212, 175, 55, 0.1); border-color: var(--gold); }
     
     .remember-container { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
     .remember-container input { width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
@@ -43,7 +42,7 @@
     
     <div class="password-row">
       <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
-      <button type="button" class="toggle-btn" id="eyeBtn" onclick="togglePassword()">👁️</button>
+      <button type="button" class="toggle-btn" id="eyeBtn" onclick="togglePassword()">Ver</button>
     </div>
 
     <label class="remember-container">
@@ -89,10 +88,10 @@
       
       if (passInput.type === 'password') {
         passInput.type = 'text';
-        eyeBtn.textContent = '🔒';
+        eyeBtn.textContent = 'Ocultar';
       } else {
         passInput.type = 'password';
-        eyeBtn.textContent = '👁️';
+        eyeBtn.textContent = 'Ver';
       }
     }
 
