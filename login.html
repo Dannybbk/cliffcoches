@@ -16,7 +16,6 @@
     input { width: 100%; padding: 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
     
-    /* Fila de contraseña con botón de texto limpio al lado */
     .password-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
     .password-row input { margin-bottom: 0; flex: 1; }
     
@@ -42,14 +41,14 @@
     
     <div class="password-row">
       <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
-      <button type="button" class="toggle-btn" id="eyeBtn" onclick="togglePassword()">Ver</button>
+      <button type="button" class="toggle-btn" id="eyeBtn">Ver</button>
     </div>
 
     <label class="remember-container">
       <input type="checkbox" id="rememberMe"> Recordar mis datos en este dispositivo
     </label>
 
-    <button class="btn-login" onclick="hacerLogin()">Entrar</button>
+    <button class="btn-login" id="loginBtn">Entrar</button>
     <div id="error" class="error"></div>
   </div>
 
@@ -82,18 +81,19 @@
     }
     checkExistingSession();
 
-    function togglePassword() {
+    // Event listener directo para evitar bloqueos en Chrome
+    document.getElementById('eyeBtn').addEventListener('click', function() {
       const passInput = document.getElementById('password');
-      const eyeBtn = document.getElementById('eyeBtn');
-      
       if (passInput.type === 'password') {
         passInput.type = 'text';
-        eyeBtn.textContent = 'Ocultar';
+        this.textContent = 'Ocultar';
       } else {
         passInput.type = 'password';
-        eyeBtn.textContent = 'Ver';
+        this.textContent = 'Ver';
       }
-    }
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', hacerLogin);
 
     async function hacerLogin() {
       const email = document.getElementById('email').value.trim();
