@@ -54,12 +54,16 @@
   <script>
     const supabase = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
-      'sb_publishable_u6yE65yC8XobZYFOsINqJA_5WyYA-An'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
     );
 
-    async function checkAuth() {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) window.location.href = 'login.html';
+    async function initAdmin() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = 'login.html';
+        return;
+      }
+      loadCars();
     }
 
     async function loadCars() {
@@ -111,8 +115,7 @@
       window.location.href = 'login.html';
     }
 
-    checkAuth();
-    loadCars();
+    initAdmin();
   </script>
 </body>
 </html>
