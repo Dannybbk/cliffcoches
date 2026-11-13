@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | CliffCoches.Net</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #111; --white: #fff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: var(--black); color: var(--white); padding: 20px; }
+    .container { max-width: 500px; margin: 80px auto; background: var(--dark); padding: 40px; border-radius: 12px; }
+    h1 { text-align: center; margin-bottom: 30px; color: var(--gold); }
+    input { width: 100%; padding: 14px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 6px; }
+    button { width: 100%; padding: 14px; background: var(--gold); color: black; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    button:hover { opacity: 0.9; }
+    .error { color: #ff6b6b; text-align: center; margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CliffCoches Admin</h1>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Contraseña" />
+    <button onclick="login()">Entrar</button>
+    <div id="error" class="error"></div>
+  </div>
+
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://axeolovhcpqcubkachez.supabase.co',
+      'sb_publishable_u6yE65yC8XobZYFOsINqJA_5WyYA-An'
+    );
+
+    async function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        document.getElementById('error').textContent = 'Error: ' + error.message;
+      } else {
+        window.location.href = 'admin.html';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CliffCoches.Net | Vehículos Premium en España</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --black:#0A0A0A; --dark:#111; --gold:#D4AF37; --white:#fff; --gray:#A0A0A0; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:Inter,sans-serif;background:var(--black);color:var(--white);}
+    .gold{color:var(--gold);}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px;}
+    header{position:fixed;top:0;width:100%;background:rgba(10,10,10,.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid #222;}
+    nav{display:flex;justify-content:space-between;align-items:center;height:80px;}
+    .logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;}
+    .logo span{color:var(--gold);}
+    .btn{background:var(--gold);color:var(--black);padding:12px 28px;border-radius:4px;text-decoration:none;font-weight:600;}
+    .hero{min-height:100vh;background:linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.75)),url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;display:flex;align-items:center;text-align:center;padding:140px 20px 100px;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:2.8rem;margin-bottom:20px;line-height:1.2;}
+    .hero p{font-size:1.05rem;margin-bottom:30px;color:#ddd;max-width:90%;margin-left:auto;margin-right:auto;}
+    section{padding:100px 0;}
+    .section-title{text-align:center;font-family:'Playfair Display',serif;font-size:2.8rem;margin-bottom:60px;}
+    .section-title::after{content:'';display:block;width:80px;height:3px;background:var(--gold);margin:20px auto 0;}
+    .cars-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;}
+    .car-card{background:var(--dark);border-radius:8px;overflow:hidden;transition:.3s;}
+    .car-card:hover{transform:translateY(-8px);}
+    .car-image{height:200px;background:#222 center/cover;}
+    .car-info{padding:20px;}
+    .price{color:var(--gold);font-size:1.5rem;font-weight:700;margin:10px 0;}
+    .details{color:var(--gray);font-size:.9rem;margin-bottom:15px;}
+    .header-right { display: flex; align-items: center; gap: 10px; position: relative; }
+    .menu-btn { background: none; border: none; color: white; font-size: 26px; cursor: pointer; padding: 8px; }
+    .dropdown { position: absolute; top: 100%; right: 0; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; min-width: 180px; display: none; z-index: 9999; }
+    .dropdown.show { display: block; }
+    .dropdown a { display: block; padding: 14px 20px; color: var(--white); text-decoration: none; border-bottom: 1px solid #333; }
+    .dropdown a:last-child { border-bottom: none; }
+    .dropdown a:hover { background: #222; color: var(--gold); }
+    footer{background:#050505;padding:50px 0;text-align:center;border-top:1px solid #222;}
+    @media(max-width:768px){.hero h1{font-size:2.4rem;}}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <div class="logo">Cliff<span>Coches</span>.Net</div>
+      <a href="https://wa.me/34613801086" class="btn" style="padding:10px 16px;font-size:0.9rem;">WhatsApp</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Vehículos Premium<br><span class="gold">Selección Nacional</span></h1>
+      <p>Selección exclusiva de coches nacionales verificados.<br>Transparencia total, calidad garantizada y atención personalizada.</p>
+      <a href="#vehiculos" class="btn">Ver Vehículos</a>
+    </div>
+  </section>
+
+  <section id="vehiculos">
+    <div class="container">
+      <h2 class="section-title">Vehículos Disponibles</h2>
+      <div id="cars" class="cars-grid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="logo" style="margin-bottom:10px;">Cliff<span class="gold">Coches</span>.Net</div>
+      <p>Selección exclusiva de coches nacionales verificados</p>
+      <p style="margin-top:15px;color:#666;">© 2026 CliffCoches.Net</p>
+      <p style="margin-top:8px;"><a href="login.html" style="color:#aaa;font-size:0.85rem;text-decoration:underline;">Área privada</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://axeolovhcpqcubkachez.supabase.co',
+      'sb_publishable_u6yE65yC8XobZYFOsINqJA_5WyYA-An'
+    );
+
+    async function loadCars() {
+      const { data, error } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('status', 'available')
+        .order('created_at', { ascending: false });
+
+      const container = document.getElementById('cars');
+      if (error || !data?.length) {
+        container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;">No hay vehículos disponibles en este momento.</p>';
+        return;
+      }
+
+      container.innerHTML = data.map(car => `
+        <div class="car-card">
+          <div class="car-image" style="background-image:url('${car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}')"></div>
+          <div class="car-info">
+            <h3>${car.title || car.brand + ' ' + car.model}</h3>
+            <div class="details">${car.year || ''} • ${car.mileage ? car.mileage.toLocaleString() + ' km' : ''} • ${car.fuel || ''} • ${car.transmission || ''}</div>
+            <div class="price">${car.price ? car.price.toLocaleString() + ' €' : 'Consultar'}</div>
+            <a href="https://wa.me/34613801086?text=Me%20interesa%20el%20${encodeURIComponent(car.title || car.brand)}" class="btn">Solicitar info</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    loadCars();
+  </script>
+</body>
+</html>

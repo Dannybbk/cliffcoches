@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin | CliffCoches.Net</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #111; --white: #fff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: var(--black); color: var(--white); padding: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    h1 { color: var(--gold); }
+    button { background: var(--gold); color: black; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .form { background: var(--dark); padding: 25px; border-radius: 10px; margin-bottom: 30px; }
+    input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; background: #222; border: 1px solid #333; color: white; border-radius: 6px; }
+    .cars { display: grid; gap: 15px; }
+    .car { background: var(--dark); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .delete { background: #ff4d4d; color: white; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Panel de Administración</h1>
+    <button onclick="logout()">Cerrar sesión</button>
+  </header>
+
+  <div class="form">
+    <h2>Añadir nuevo coche</h2>
+    <input id="title" placeholder="Título (ej: BMW Serie 3 2021)" />
+    <input id="brand" placeholder="Marca" />
+    <input id="model" placeholder="Modelo" />
+    <input id="year" type="number" placeholder="Año" />
+    <input id="price" type="number" placeholder="Precio (€)" />
+    <input id="mileage" type="number" placeholder="Kilómetros" />
+    <select id="fuel">
+      <option value="Diésel">Diésel</option>
+      <option value="Gasolina">Gasolina</option>
+      <option value="Híbrido">Híbrido</option>
+      <option value="Eléctrico">Eléctrico</option>
+    </select>
+    <select id="transmission">
+      <option value="Automático">Automático</option>
+      <option value="Manual">Manual</option>
+    </select>
+    <textarea id="description" placeholder="Descripción" rows="3"></textarea>
+    <input id="main_image" placeholder="URL de la foto principal (opcional)" />
+    <button onclick="addCar()">Publicar coche</button>
+  </div>
+
+  <h2>Coches publicados</h2>
+  <div id="cars" class="cars"></div>
+
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://axeolovhcpqcubkachez.supabase.co',
+      'sb_publishable_u6yE65yC8XobZYFOsINqJA_5WyYA-An'
+    );
+
+    async function checkAuth() {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) window.location.href = 'login.html';
+    }
+
+    async function loadCars() {
+      const { data, error } = await supabase.from('vehicles').select('*').order('created_at', { ascending: false });
+      if (error) return console.error(error);
+      const container = document.getElementById('cars');
+      container.innerHTML = data.map(car => `
+        <div class="car">
+          <div>
+            <strong>${car.title || car.brand + ' ' + car.model}</strong><br>
+            ${car.year} • ${car.price} € • ${car.status}
+          </div>
+          <button class="delete" onclick="deleteCar('${car.id}')">Borrar</button>
+        </div>
+      `).join('');
+    }
+
+    async function addCar() {
+      const car = {
+        title: document.getElementById('title').value,
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value,
+        year: parseInt(document.getElementById('year').value),
+        price: parseFloat(document.getElementById('price').value),
+        mileage: parseInt(document.getElementById('mileage').value) || null,
+        fuel: document.getElementById('fuel').value,
+        transmission: document.getElementById('transmission').value,
+        description: document.getElementById('description').value,
+        main_image: document.getElementById('main_image').value || null,
+        status: 'available'
+      };
+      const { error } = await supabase.from('vehicles').insert(car);
+      if (error) alert('Error: ' + error.message);
+      else {
+        alert('Coche publicado');
+        loadCars();
+      }
+    }
+
+    async function deleteCar(id) {
+      if (!confirm('¿Borrar este coche?')) return;
+      const { error } = await supabase.from('vehicles').delete().eq('id', id);
+      if (error) alert(error.message);
+      else loadCars();
+    }
+
+    async function logout() {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    }
+
+    checkAuth();
+    loadCars();
+  </script>
+</body>
+</html>
