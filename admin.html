@@ -64,24 +64,51 @@
       <div class="form-grid">
         <input class="form-full" id="title" placeholder="Título opcional (ej: Impecable, única mano)" />
         
-        <!-- Selector de Marcas de Coches en Europa -->
-        <select id="brand" class="form-full" onchange="actualizarModelos()">
+        <!-- Lista completa de marcas europeas y generales -->
+        <select id="brand" class="form-full">
           <option value="">Selecciona Marca...</option>
+          <option value="Alfa Romeo">Alfa Romeo</option>
+          <option value="Aston Martin">Aston Martin</option>
           <option value="Audi">Audi</option>
+          <option value="Bentley">Bentley</option>
           <option value="BMW">BMW</option>
+          <option value="BYD">BYD</option>
+          <option value="Chevrolet">Chevrolet</option>
+          <option value="Chrysler">Chrysler</option>
           <option value="Citroën">Citroën</option>
           <option value="Cupra">Cupra</option>
+          <option value="Dacia">Dacia</option>
+          <option value="DS">DS Automobiles</option>
+          <option value="Ferrari">Ferrari</option>
           <option value="Fiat">Fiat</option>
           <option value="Ford">Ford</option>
+          <option value="Honda">Honda</option>
           <option value="Hyundai">Hyundai</option>
+          <option value="Infiniti">Infiniti</option>
+          <option value="Jaguar">Jaguar</option>
+          <option value="Jeep">Jeep</option>
           <option value="Kia">Kia</option>
+          <option value="Lamborghini">Lamborghini</option>
+          <option value="Land Rover">Land Rover</option>
+          <option value="Lexus">Lexus</option>
+          <option value="Maserati">Maserati</option>
+          <option value="Mazda">Mazda</option>
+          <option value="McLaren">McLaren</option>
           <option value="Mercedes-Benz">Mercedes-Benz</option>
+          <option value="MG">MG</option>
+          <option value="MINI">MINI</option>
+          <option value="Mitsubishi">Mitsubishi</option>
           <option value="Nissan">Nissan</option>
           <option value="Opel">Opel</option>
           <option value="Peugeot">Peugeot</option>
+          <option value="Porsche">Porsche</option>
           <option value="Renault">Renault</option>
+          <option value="Rolls-Royce">Rolls-Royce</option>
           <option value="Seat">Seat</option>
           <option value="Skoda">Skoda</option>
+          <option value="Smart">Smart</option>
+          <option value="Subaru">Subaru</option>
+          <option value="Suzuki">Suzuki</option>
           <option value="Tesla">Tesla</option>
           <option value="Toyota">Toyota</option>
           <option value="Volkswagen">Volkswagen</option>
@@ -89,10 +116,8 @@
           <option value="Otro">Otra marca</option>
         </select>
 
-        <!-- Selector de Modelos Dinámico -->
-        <select id="model" class="form-full">
-          <option value="">Primero selecciona una marca...</option>
-        </select>
+        <!-- Modelo dinámico o escrito libre si prefieren -->
+        <input id="model" class="form-full" placeholder="Modelo (ej: Serie 3, A3, Golf, Q5...)" />
 
         <input id="year" type="number" placeholder="Año (ej: 2022)" />
         <input id="price" type="number" placeholder="Precio (€)" />
@@ -130,49 +155,15 @@
   <script>
     const supabase = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
-    );
-
-    // Base de datos de modelos europeos comunes
-    const modelosPorMarca = {
-      "Audi": ["A1", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q5", "Q7", "Q8", "TT", "RS3", "RS6"],
-      "BMW": ["Serie 1", "Serie 2", "Serie 3", "Serie 4", "Serie 5", "Serie 7", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Z4", "M3", "M4"],
-      "Citroën": ["C3", "C4", "C5 Aircross", "Berlingo", "C1", "C-Elysee"],
-      "Cupra": ["Formentor", "Leon", "Born", "Ateca", "Tavascan"],
-      "Fiat": ["500", "Panda", "Tipo", "Doblo", "500X"],
-      "Ford": ["Fiesta", "Focus", "Puma", "Kuga", "Mustang", "Mondeo", "Explorer"],
-      "Hyundai": ["i10", "i20", "i30", "Tucson", "Kona", "Santa Fe", "Ioniq 5"],
-      "Kia": ["Picanto", "Rio", "Ceed", "Sportage", "Niro", "Sorento", "EV6"],
-      "Mercedes-Benz": ["Clase A", "Clase B", "Clase C", "Clase E", "Clase S", "CLA", "GLA", "GLB", "GLC", "GLE", "G-Wagon"],
-      "Nissan": ["Micra", "Juke", "Qashqai", "X-Trail", "Leaf", "Ariya"],
-      "Opel": ["Corsa", "Astra", "Mokka", "Crossland", "Grandland"],
-      "Peugeot": ["208", "308", "508", "2008", "3008", "5008", "Rifter"],
-      "Renault": ["Clio", "Megane", "Captur", "Austral", "Arkana", "Kadjar", "Scenic"],
-      "Seat": ["Ibiza", "Leon", "Arona", "Ateca", "Taraco"],
-      "Skoda": ["Fabia", "Octavia", "Superb", "Kamiq", "Karoq", "Kodiaq", "Enyaq"],
-      "Tesla": ["Model 3", "Model Y", "Model S", "Model X"],
-      "Toyota": ["Yaris", "Corolla", "C-HR", "RAV4", "Land Cruiser", "Hilux", "Aygo X"],
-      "Volkswagen": ["Polo", "Golf", "T-Roc", "Tiguan", "Passat", "Touareg", "ID.3", "ID.4"],
-      "Volvo": ["XC40", "XC60", "XC90", "V40", "V60", "S60", "S90"],
-      "Otro": ["Personalizado"]
-    };
-
-    function actualizarModelos() {
-      const marcaSelect = document.getElementById('brand');
-      const modeloSelect = document.getElementById('model');
-      const marcaSeleccionada = marcaSelect.value;
-
-      modeloSelect.innerHTML = '<option value="">Selecciona Modelo...</option>';
-
-      if (modelosPorMarca[marcaSeleccionada]) {
-        modelosPorMarca[marcaSeleccionada].forEach(modelo => {
-          const opt = document.createElement('option');
-          opt.value = modelo;
-          opt.textContent = modelo;
-          modeloSelect.appendChild(opt);
-        });
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw',
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
       }
-    }
+    );
 
     async function initAdmin() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -216,7 +207,7 @@
     async function addCar() {
       const title = document.getElementById('title').value.trim();
       const brand = document.getElementById('brand').value;
-      const model = document.getElementById('model').value;
+      const model = document.getElementById('model').value.trim();
       const year = document.getElementById('year').value;
       const price = document.getElementById('price').value;
       const mileage = document.getElementById('mileage').value;
@@ -226,7 +217,7 @@
       const fileInput = document.getElementById('carImageFile');
 
       if (!brand || !model || !price) {
-        alert('Por favor, selecciona la Marca, el Modelo y pon el Precio.');
+        alert('Por favor, selecciona la Marca, escribe el Modelo y pon el Precio.');
         return;
       }
 
@@ -274,7 +265,7 @@
         alert('¡Vehículo publicado con éxito!');
         document.getElementById('title').value = '';
         document.getElementById('brand').value = '';
-        document.getElementById('model').innerHTML = '<option value="">Primero selecciona una marca...</option>';
+        document.getElementById('model').value = '';
         document.getElementById('year').value = '';
         document.getElementById('price').value = '';
         document.getElementById('mileage').value = '';
