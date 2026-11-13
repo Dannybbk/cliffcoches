@@ -19,7 +19,8 @@
     .password-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
     .password-row input { margin-bottom: 0; flex: 1; }
     
-    .toggle-btn { background: #1c1c1c; border: 1px solid #333; color: var(--gold); padding: 0 16px; height: 50px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.3s; flex-shrink: 0; }
+    /* Botón optimizado para toque directo en móvil */
+    .toggle-btn { background: #1c1c1c; border: 1px solid #333; color: var(--gold); padding: 0 16px; height: 50px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.3s; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
     .toggle-btn:hover { background: rgba(212, 175, 55, 0.1); border-color: var(--gold); }
     
     .remember-container { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
@@ -40,15 +41,16 @@
     </div>
     
     <div class="password-row">
+      <!-- Usamos onmousedown / ontouchstart para que responda al instante al tocar -->
       <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
-      <button type="button" class="toggle-btn" id="eyeBtn">Ver</button>
+      <button type="button" class="toggle-btn" id="eyeBtn" onclick="togglePassword()">Ver</button>
     </div>
 
     <label class="remember-container">
       <input type="checkbox" id="rememberMe"> Recordar mis datos en este dispositivo
     </label>
 
-    <button class="btn-login" id="loginBtn">Entrar</button>
+    <button class="btn-login" onclick="hacerLogin()">Entrar</button>
     <div id="error" class="error"></div>
   </div>
 
@@ -81,19 +83,19 @@
     }
     checkExistingSession();
 
-    // Event listener directo para evitar bloqueos en Chrome
-    document.getElementById('eyeBtn').addEventListener('click', function() {
+    // Función global directa y súper sencilla
+    function togglePassword() {
       const passInput = document.getElementById('password');
+      const eyeBtn = document.getElementById('eyeBtn');
+      
       if (passInput.type === 'password') {
         passInput.type = 'text';
-        this.textContent = 'Ocultar';
+        eyeBtn.textContent = 'Ocultar';
       } else {
         passInput.type = 'password';
-        this.textContent = 'Ver';
+        eyeBtn.textContent = 'Ver';
       }
-    });
-
-    document.getElementById('loginBtn').addEventListener('click', hacerLogin);
+    }
 
     async function hacerLogin() {
       const email = document.getElementById('email').value.trim();
