@@ -12,14 +12,17 @@
     .container { width: 100%; max-width: 420px; background: var(--dark); padding: 35px; border-radius: 12px; border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     h1 { text-align: center; margin-bottom: 25px; color: var(--gold); font-size: 1.6rem; font-family: 'Playfair Display', serif; }
     
-    .input-group { position: relative; margin-bottom: 15px; }
-    input { width: 100%; padding: 14px 45px 14px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
+    .input-group { margin-bottom: 15px; }
+    input { width: 100%; padding: 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
     
-    /* Botón del ojo con diseño SVG limpio */
-    .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
-    .toggle-password svg { width: 22px; height: 22px; stroke: var(--gray); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s; }
-    .toggle-password:hover svg { stroke: var(--gold); }
+    /* Contenedor contraseña + botón al lado */
+    .password-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+    .password-row input { margin-bottom: 0; }
+    
+    /* Botón independiente fuera del input para que Chrome no lo bloquee */
+    .toggle-btn { background: #1c1c1c; border: 1px solid #333; color: var(--white); padding: 0 16px; height: 50px; border-radius: 8px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; }
+    .toggle-btn:hover { border-color: var(--gold); }
     
     .remember-container { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
     .remember-container input { width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
@@ -35,18 +38,12 @@
     <h1>CliffCoches Admin</h1>
     
     <div class="input-group">
-      <input type="email" id="email" placeholder="Correo electrónico" />
+      <input type="email" id="email" placeholder="Correo electrónico" autocomplete="email" />
     </div>
     
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Contraseña" />
-      <button type="button" class="toggle-password" id="eyeBtn" onclick="togglePassword()" title="Ver contraseña">
-        <!-- Icono de Ojo Abierto por defecto -->
-        <svg id="eyeIcon" viewBox="0 0 24 24">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-          <circle cx="12" cy="12" r="3"></circle>
-        </svg>
-      </button>
+    <div class="password-row">
+      <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
+      <button type="button" class="toggle-btn" id="eyeBtn" onclick="togglePassword()">👁️</button>
     </div>
 
     <label class="remember-container">
@@ -88,22 +85,14 @@
 
     function togglePassword() {
       const passInput = document.getElementById('password');
-      const eyeIcon = document.getElementById('eyeIcon');
+      const eyeBtn = document.getElementById('eyeBtn');
       
       if (passInput.type === 'password') {
         passInput.type = 'text';
-        // Cambiar a icono de Ojo Tachado
-        eyeIcon.innerHTML = `
-          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-          <line x1="1" y1="1" x2="23" y2="23"></line>
-        `;
+        eyeBtn.textContent = '🔒';
       } else {
         passInput.type = 'password';
-        // Volver a icono de Ojo Abierto
-        eyeIcon.innerHTML = `
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-          <circle cx="12" cy="12" r="3"></circle>
-        `;
+        eyeBtn.textContent = '👁️';
       }
     }
 
