@@ -16,7 +16,10 @@
     input { width: 100%; padding: 14px 45px 14px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
     
-    .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; padding: 5px; }
+    /* Botón del ojo con diseño SVG limpio */
+    .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+    .toggle-password svg { width: 22px; height: 22px; stroke: var(--gray); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s; }
+    .toggle-password:hover svg { stroke: var(--gold); }
     
     .remember-container { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
     .remember-container input { width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
@@ -37,7 +40,13 @@
     
     <div class="input-group">
       <input type="password" id="password" placeholder="Contraseña" />
-      <button type="button" class="toggle-password" id="eyeBtn" onclick="togglePassword()">👁️</button>
+      <button type="button" class="toggle-password" id="eyeBtn" onclick="togglePassword()" title="Ver contraseña">
+        <!-- Icono de Ojo Abierto por defecto -->
+        <svg id="eyeIcon" viewBox="0 0 24 24">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </button>
     </div>
 
     <label class="remember-container">
@@ -79,13 +88,22 @@
 
     function togglePassword() {
       const passInput = document.getElementById('password');
-      const eyeBtn = document.getElementById('eyeBtn');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
       if (passInput.type === 'password') {
         passInput.type = 'text';
-        eyeBtn.textContent = '👁️‍🗨️'; // Cambia el icono al revelar
+        // Cambiar a icono de Ojo Tachado
+        eyeIcon.innerHTML = `
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        `;
       } else {
         passInput.type = 'password';
-        eyeBtn.textContent = '👁️'; // Vuelve al icono normal
+        // Volver a icono de Ojo Abierto
+        eyeIcon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        `;
       }
     }
 
