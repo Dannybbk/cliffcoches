@@ -14,7 +14,7 @@
     input { width: 100%; padding: 14px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 6px; }
     button { width: 100%; padding: 14px; background: var(--gold); color: black; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     button:hover { opacity: 0.9; }
-    .error { color: #ff6b6b; text-align: center; margin-top: 15px; }
+    .error { color: #ff6b6b; text-align: center; margin-top: 15px; min-height: 20px; }
   </style>
 </head>
 <body>
@@ -35,10 +35,15 @@
     async function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = 'Entrando...';
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      
       if (error) {
-        document.getElementById('error').textContent = 'Error: ' + error.message;
+        errorDiv.textContent = 'Error: ' + error.message;
       } else {
+        errorDiv.textContent = '¡Correcto! Redirigiendo...';
         window.location.href = 'admin.html';
       }
     }
