@@ -30,13 +30,6 @@
     .car-info{padding:20px;}
     .price{color:var(--gold);font-size:1.5rem;font-weight:700;margin:10px 0;}
     .details{color:var(--gray);font-size:.9rem;margin-bottom:15px;}
-    .header-right { display: flex; align-items: center; gap: 10px; position: relative; }
-    .menu-btn { background: none; border: none; color: white; font-size: 26px; cursor: pointer; padding: 8px; }
-    .dropdown { position: absolute; top: 100%; right: 0; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; min-width: 180px; display: none; z-index: 9999; }
-    .dropdown.show { display: block; }
-    .dropdown a { display: block; padding: 14px 20px; color: var(--white); text-decoration: none; border-bottom: 1px solid #333; }
-    .dropdown a:last-child { border-bottom: none; }
-    .dropdown a:hover { background: #222; color: var(--gold); }
     footer{background:#050505;padding:50px 0;text-align:center;border-top:1px solid #222;}
     @media(max-width:768px){.hero h1{font-size:2.4rem;}}
   </style>
@@ -76,7 +69,7 @@
   <script>
     const supabase = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
-      'sb_publishable_u6yE65yC8XobZYFOsINqJA_5WyYA-An'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
     );
 
     async function loadCars() {
