@@ -71,7 +71,7 @@
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
     }
 
-    /* Hero Section adaptado a móvil */
+    /* Hero Section */
     .hero {
       min-height: auto;
       background: linear-gradient(to bottom, rgba(8,8,8,0.75), rgba(8,8,8,0.96)), 
@@ -108,28 +108,50 @@
 
     .hero-text p { margin: 4px 0; }
 
-    /* Insignias en línea para móvil */
-    .features-bar {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 5px;
+    /* Sección de Valores / Compromisos Profesionales */
+    .features-section {
+      padding: 50px 0;
+      background: var(--dark);
+      border-bottom: 1px solid var(--border);
     }
 
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--white);
-      font-size: 0.78rem;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 6px 12px;
-      border-radius: 20px;
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
       border: 1px solid var(--border);
+      padding: 24px;
+      border-radius: 12px;
+      text-align: left;
+      transition: border-color 0.3s;
     }
 
-    .feature-item span { color: var(--gold); }
+    .feature-card:hover {
+      border-color: var(--gold);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+
+    .feature-card p {
+      color: var(--gray);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
 
     section { padding: 40px 0; }
 
@@ -197,6 +219,12 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .car-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold);
     }
 
     .car-image {
@@ -258,9 +286,9 @@
     footer .logo { font-size: 1.2rem; margin-bottom: 8px; display: inline-block; }
 
     @media (min-width: 768px) {
-      .hero { padding: 140px 20px 60px; min-height: 75vh; }
-      .hero h1 { font-size: 3rem; }
-      .hero-text { font-size: 1.05rem; padding: 25px; }
+      .hero { padding: 140px 20px 60px; min-height: 65vh; }
+      .hero h1 { font-size: 2.8rem; }
+      .hero-text { font-size: 1.02rem; padding: 22px; }
       .cars-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
       section { padding: 60px 0; }
     }
@@ -283,12 +311,28 @@
         <p><strong>20 años de experiencia en Canadá. Ahora en España.</strong></p>
         <p>Asesoramiento personalizado, transparencia y atención directa.</p>
       </div>
+    </div>
+  </section>
 
-      <!-- Insignias compactas en móvil -->
-      <div class="features-bar">
-        <div class="feature-item"><span>✓</span> Verificados</div>
-        <div class="feature-item"><span>★</span> 20 Años Exp.</div>
-        <div class="feature-item"><span>🛡️</span> Garantía</div>
+  <!-- Sección Profesional de Compromisos -->
+  <section class="features-section">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Vehículos Certificados</h3>
+          <p>Inspección exhaustiva de más de 100 puntos y kilometraje certificado en cada unidad.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>20 Años de Experiencia</h3>
+          <p>Trayectoria internacional consolidada ahora en España para ofrecerte un servicio de total confianza.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Importación a la Carta</h3>
+          <p>¿Buscas un modelo específico? Nos encargamos de localizarlo, verificarlo y tramitarlo por ti.</p>
+        </div>
       </div>
     </div>
   </section>
