@@ -20,8 +20,9 @@
     input { width: 100%; padding: 12px 45px 12px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; font-size: 0.95rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
     
-    /* Botón del ojo con máxima prioridad para que sea pulsable siempre */
-    .toggle-password { position: absolute; right: 10px; background: transparent; border: none; cursor: pointer; font-size: 1.3rem; z-index: 99; padding: 5px; display: flex; align-items: center; justify-content: center; }
+    /* Estilo del botón limpio y sin emojis raros */
+    .toggle-password { position: absolute; right: 10px; background: transparent; border: none; cursor: pointer; color: var(--gray); font-size: 0.9rem; font-weight: 600; z-index: 99; padding: 5px; }
+    .toggle-password:hover { color: var(--gold); }
 
     .checkbox-group { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
     .checkbox-group input { width: auto; padding: 0; cursor: pointer; accent-color: var(--gold); }
@@ -47,8 +48,9 @@
       <div class="form-group">
         <label for="password">Contraseña</label>
         <div class="input-container">
+          <!-- Usamos text con una clase de estilo de enmascaramiento nativo si falla, pero alternando tipos de forma directa -->
           <input type="password" id="password" required placeholder="••••••••">
-          <button type="button" class="toggle-password" id="eyeBtn" onclick="togglePasswordVisibility()">👁️</button>
+          <button type="button" class="toggle-password" id="eyeBtn" onclick="togglePasswordVisibility()">Ver</button>
         </div>
       </div>
 
@@ -80,13 +82,12 @@
       const passwordInput = document.getElementById('password');
       const eyeBtn = document.getElementById('eyeBtn');
       
-      // Forzamos el cambio de atributo de forma estricta
-      if (passwordInput.getAttribute('type') === 'password') {
-        passwordInput.setAttribute('type', 'text');
-        eyeBtn.textContent = '🙈';
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeBtn.textContent = 'Ocultar';
       } else {
-        passwordInput.setAttribute('type', 'password');
-        eyeBtn.textContent = '👁️';
+        passwordInput.type = 'password';
+        eyeBtn.textContent = 'Ver';
       }
     }
 
