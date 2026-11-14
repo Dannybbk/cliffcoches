@@ -81,7 +81,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 100px 16px 40px;
+      padding: 100px 16px 50px;
       border-bottom: 1px solid var(--border);
     }
 
@@ -108,49 +108,29 @@
 
     .hero-text p { margin: 4px 0; }
 
-    /* Sección de Valores / Compromisos Profesionales */
-    .features-section {
-      padding: 50px 0;
-      background: var(--dark);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .feature-card {
-      background: var(--card-bg);
+    /* Barra de compromisos discreta en línea horizontal */
+    .discreet-trust-bar {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 30px;
       border: 1px solid var(--border);
-      padding: 24px;
-      border-radius: 12px;
-      text-align: left;
-      transition: border-color 0.3s;
     }
 
-    .feature-card:hover {
-      border-color: var(--gold);
-    }
-
-    .feature-icon {
-      font-size: 1.8rem;
-      color: var(--gold);
-      margin-bottom: 12px;
-    }
-
-    .feature-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-      color: var(--white);
-    }
-
-    .feature-card p {
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
       color: var(--gray);
-      font-size: 0.88rem;
-      line-height: 1.5;
+    }
+
+    .trust-item span {
+      color: var(--gold);
     }
 
     section { padding: 40px 0; }
@@ -311,28 +291,12 @@
         <p><strong>20 años de experiencia en Canadá. Ahora en España.</strong></p>
         <p>Asesoramiento personalizado, transparencia y atención directa.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- Sección Profesional de Compromisos -->
-  <section class="features-section">
-    <div class="container">
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3>Vehículos Certificados</h3>
-          <p>Inspección exhaustiva de más de 100 puntos y kilometraje certificado en cada unidad.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⭐</div>
-          <h3>20 Años de Experiencia</h3>
-          <p>Trayectoria internacional consolidada ahora en España para ofrecerte un servicio de total confianza.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎯</div>
-          <h3>Importación a la Carta</h3>
-          <p>¿Buscas un modelo específico? Nos encargamos de localizarlo, verificarlo y tramitarlo por ti.</p>
-        </div>
+      <!-- Barra discreta de confianza -->
+      <div class="discreet-trust-bar">
+        <div class="trust-item"><span>✓</span> Vehículos Verificados</div>
+        <div class="trust-item"><span>★</span> 20 Años de Experiencia</div>
+        <div class="trust-item"><span>🎯</span> Importación a la Carta</div>
       </div>
     </div>
   </section>
