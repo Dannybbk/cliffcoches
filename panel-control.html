@@ -7,10 +7,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #141414; --white: #fff; --gray: #888; --red: #ff4d4d; }
+    :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #141414; --white: #fff; --gray: #888; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
-    .login-card { background: var(--dark); padding: 30px; border-radius: 12px; border: 1px solid #222; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .login-card { background: var(--dark); padding: 30px; border-radius: 12px; border: 1px solid #222; width: 100%; max-width: 400px; }
     h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; text-align: center; margin-bottom: 25px; }
     h1 span { color: var(--white); }
     .form-group { margin-bottom: 15px; }
@@ -42,7 +42,14 @@
   <script>
     const sb = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw',
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
     );
 
     async function handleLogin(event) {
@@ -52,14 +59,11 @@
       const btn = document.getElementById('loginBtn');
       const errorDiv = document.getElementById('errorMsg');
 
-      btn.textContent = 'Verificando... ⏳';
+      btn.textContent = 'Verificando...';
       btn.disabled = true;
       errorDiv.style.display = 'none';
 
-      const { error } = await sb.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+      const { error } = await sb.auth.signInWithPassword({ email, password });
 
       if (error) {
         errorDiv.textContent = '⚠️ ' + error.message;
@@ -70,6 +74,11 @@
         window.location.href = 'admin.html';
       }
     }
+
+    // Si ya hay sesión, ir directo al admin
+    sb.auth.getSession().then(({ data }) => {
+      if (data.session) window.location.href = 'admin.html';
+    });
   </script>
 </body>
 </html>
