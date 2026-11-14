@@ -34,7 +34,30 @@
     <div class="card">
       <h2>Añadir Vehículo</h2>
       <input id="title" placeholder="Título opcional">
-      <input id="brand" placeholder="Marca">
+      <select id="brand">
+        <option value="">Selecciona Marca...</option>
+        <option>Audi</option>
+        <option>BMW</option>
+        <option>Cupra</option>
+        <option>Ford</option>
+        <option>Mercedes-Benz</option>
+        <option>Peugeot</option>
+        <option>Renault</option>
+        <option>Seat</option>
+        <option>Toyota</option>
+        <option>Volkswagen</option>
+        <option>Volvo</option>
+        <option>Alfa Romeo</option>
+        <option>Citroën</option>
+        <option>Fiat</option>
+        <option>Hyundai</option>
+        <option>Kia</option>
+        <option>Nissan</option>
+        <option>Opel</option>
+        <option>Skoda</option>
+        <option>Tesla</option>
+        <option>Otro</option>
+      </select>
       <input id="model" placeholder="Modelo">
       <input id="year" type="number" placeholder="Año">
       <input id="price" type="number" placeholder="Precio">
@@ -62,13 +85,7 @@
     const sb = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw',
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
+      { auth: { persistSession: true, autoRefreshToken: true } }
     );
 
     async function init() {
@@ -93,7 +110,7 @@
     }
 
     async function addCar() {
-      const brand = document.getElementById('brand').value.trim();
+      const brand = document.getElementById('brand').value;
       const model = document.getElementById('model').value.trim();
       const price = document.getElementById('price').value;
       if (!brand || !model || !price) return alert('Marca, modelo y precio son obligatorios');
@@ -124,6 +141,7 @@
       else {
         alert('¡Publicado!');
         document.querySelectorAll('input').forEach(i => i.value = '');
+        document.getElementById('brand').value = '';
         loadCars();
       }
     }
