@@ -79,14 +79,16 @@
     }
 
     async function loadCars() {
-      const { data } = await sb.from('vehicles').select('*').in('status',['available','reserved']).order('created_at',{ascending:false});
+      const { data } = await sb.from('vehicles').select('*').in('status',['available','reserved','sold']).order('created_at',{ascending:false});
       const container = document.getElementById('cars');
       if (!data?.length) {
         container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;">No hay vehículos disponibles.</p>';
         return;
       }
       container.innerHTML = data.map(car => {
-        const banner = car.status === 'reserved' ? '<div class="banner">RESERVADO</div>' : '';
+        let banner = '';
+        if (car.status === 'reserved') banner = '<div class="banner">RESERVADO</div>';
+        if (car.status === 'sold') banner = '<div class="banner sold">VENDIDO</div>';
         return `
           <a href="coche.html?id=${car.id}" class="car-card">
             <div class="car-image" style="background-image:url('${car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}')">
