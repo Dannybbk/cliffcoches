@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"><!DOCTYPE html>
-<html lang="es">
-<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CliffCoches.Net | Vehículos Premium en España</title>
@@ -15,7 +12,6 @@
       --dark: #141414; 
       --card-bg: #181818;
       --gold: #D4AF37; 
-      --gold-light: #f3e5ab;
       --white: #fff; 
       --gray: #999; 
       --border: #262626;
@@ -34,7 +30,6 @@
     .gold { color: var(--gold); }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-    /* Header / Navbar */
     header {
       position: fixed;
       top: 0;
@@ -82,7 +77,6 @@
       box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
     }
 
-    /* Hero Section */
     .hero {
       min-height: 75vh;
       background: linear-gradient(to bottom, rgba(8,8,8,0.65), rgba(8,8,8,0.95)), 
@@ -117,7 +111,6 @@
 
     .hero-text p { margin: 8px 0; }
 
-    /* Sections */
     section { padding: 80px 0; }
 
     .section-title {
@@ -137,7 +130,6 @@
       border-radius: 2px;
     }
 
-    /* Cars Grid */
     .cars-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -183,12 +175,9 @@
       letter-spacing: 0.5px;
       border-radius: 4px;
       text-transform: uppercase;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .banner.sold {
-      background: #ff4d4d;
-    }
+    .banner.sold { background: #ff4d4d; }
 
     .car-info {
       padding: 20px;
@@ -216,7 +205,6 @@
       margin-top: auto;
     }
 
-    /* Footer */
     footer {
       background: #050505;
       padding: 50px 0;
@@ -238,9 +226,7 @@
   <header>
     <nav class="container">
       <a href="index.html" class="logo">Cliff<span>Coches</span>.Net</a>
-      <a href="https://wa.me/34613801086" class="btn-whatsapp" target="_blank">
-        💬 WhatsApp
-      </a>
+      <a href="https://wa.me/34613801086" class="btn-whatsapp" target="_blank">💬 WhatsApp</a>
     </nav>
   </header>
 
@@ -290,122 +276,7 @@
     async function loadCars() {
       const { data } = await sb.from('vehicles').select('*').in('status',['available','reserved','sold']).order('created_at',{ascending:false});
       const container = document.getElementById('cars');
-      if (!data?.length) {
-        container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;">No hay vehículos disponibles en este momento.</p>';
-        return;
-      }
-      container.innerHTML = data.map(car => {
-        let banner = '';
-        if (car.status === 'reserved') banner = '<div class="banner">RESERVADO</div>';
-        if (car.status === 'sold') banner = '<div class="banner sold">VENDIDO</div>';
-        return `
-          <a href="coche.html?id=${car.id}" class="car-card">
-            <div class="car-image" style="background-image:url('${car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}')">
-              ${banner}
-            </div>
-            <div class="car-info">
-              <h3>${car.title || car.brand + ' ' + car.model}</h3>
-              <div class="details">${car.year||''} • ${car.mileage ? Number(car.mileage).toLocaleString('es-ES')+' km' : ''} • ${car.fuel||''}</div>
-              <div class="price">${formatPrice(car.price)}</div>
-            </div>
-          </a>
-        `;
-      }).join('');
-    }
-    loadCars();
-  </script>
-</body>
-</html>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CliffCoches.Net | Vehículos Premium en España</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <style>
-    :root { --black:#0A0A0A; --dark:#111; --gold:#D4AF37; --white:#fff; --gray:#A0A0A0; }
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:Inter,sans-serif;background:var(--black);color:var(--white);}
-    .gold{color:var(--gold);}
-    .container{max-width:1200px;margin:0 auto;padding:0 20px;}
-    header{position:fixed;top:0;width:100%;background:rgba(10,10,10,.95);backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid #222;}
-    nav{display:flex;justify-content:space-between;align-items:center;height:80px;}
-    .logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;}
-    .logo span{color:var(--gold);}
-    .btn{background:var(--gold);color:var(--black);padding:12px 28px;border-radius:4px;text-decoration:none;font-weight:600;display:inline-block;}
-    .hero{min-height:70vh;background:linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.75)),url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;display:flex;align-items:center;text-align:center;padding:140px 20px 80px;}
-    .hero h1{font-family:'Playfair Display',serif;font-size:2.8rem;margin-bottom:20px;line-height:1.2;}
-    .hero-text{font-size:1.05rem;color:#ddd;max-width:600px;margin:0 auto;line-height:1.7;}
-    .hero-text p{margin:8px 0;}
-    section{padding:80px 0;}
-    .section-title{text-align:center;font-family:'Playfair Display',serif;font-size:2.4rem;margin-bottom:40px;}
-    .section-title::after{content:'';display:block;width:80px;height:3px;background:var(--gold);margin:15px auto 0;}
-    .cars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
-    .car-card{background:var(--dark);border-radius:10px;overflow:hidden;transition:.3s;border:1px solid #222;text-decoration:none;color:white;position:relative;}
-    .car-card:hover{transform:translateY(-6px);border-color:var(--gold);}
-    .car-image{height:200px;background:#1a1a1a center/contain no-repeat;position:relative;}
-    .banner{position:absolute;top:12px;left:0;background:#ffa500;color:black;padding:4px 12px;font-size:0.75rem;font-weight:700;letter-spacing:1px;}
-    .banner.sold{background:#ff4d4d;color:white;}
-    .car-info{padding:16px;}
-    .details{color:var(--gray);font-size:0.85rem;margin:6px 0 10px;}
-    .price{color:var(--gold);font-size:1.4rem;font-weight:700;}
-    footer{background:#050505;padding:40px 0;text-align:center;border-top:1px solid #222;}
-    @media(max-width:768px){.hero h1{font-size:2.2rem;}.cars-grid{grid-template-columns:1fr;}}
-  </style>
-</head>
-<body>
-  <header>
-    <nav class="container">
-      <div class="logo">Cliff<span>Coches</span>.Net</div>
-      <a href="https://wa.me/34613801086" class="btn" style="padding:10px 16px;font-size:0.9rem;">WhatsApp</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <div class="container">
-      <h1>Vehículos Premium<br><span class="gold">Selección Nacional</span></h1>
-      <div class="hero-text">
-        <p>Selección exclusiva de vehículos nacionales e importados verificados.</p>
-        <p>20 años de experiencia en Canadá. Ahora en España.</p>
-        <p>Asesoramiento personalizado en la compra y venta de vehículos.</p>
-        <p>Profesionalidad, transparencia y atención directa en cada operación.</p>
-        <p>Tu confianza es mi mejor garantía.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="vehiculos">
-    <div class="container">
-      <h2 class="section-title">Vehículos Disponibles</h2>
-      <div id="cars" class="cars-grid"></div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <div class="logo" style="margin-bottom:10px;">Cliff<span class="gold">Coches</span>.Net</div>
-      <p>Selección exclusiva de vehículos nacionales e importados verificados</p>
-      <p style="margin-top:15px;color:#666;">© 2026 CliffCoches.Net</p>
-      <p style="margin-top:8px;"><a href="panel-control.html" style="color:#aaa;font-size:0.85rem;">Área privada</a></p>
-    </div>
-  </footer>
-
-  <script>
-    const sb = window.supabase.createClient(
-      'https://axeolovhcpqcubkachez.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
-    );
-
-    function formatPrice(p) {
-      if (!p && p !== 0) return 'Consultar';
-      let num = String(p).replace(/\./g, '').replace(',', '.');
-      num = parseFloat(num);
-      if (isNaN(num)) return 'Consultar';
-      return num.toLocaleString('es-ES') + ' €';
-    }
-
-    async function loadCars() {
-      const { data } = await sb.from('vehicles').select('*').in('status',['available','reserved','sold']).order('created_at',{ascending:false});
-      const container = document.getElementById('cars');
+      if (!container) return;
       if (!data?.length) {
         container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;">No hay vehículos disponibles.</p>';
         return;
