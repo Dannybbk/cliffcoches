@@ -89,14 +89,14 @@
   </div>
 
   <script>
-    const supabase = window.supabase.createClient(
+    const sb = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
     );
 
     async function initAdmin() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { location.href = 'login.html'; return; }
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) { location.href = 'panel-control.html'; return; }
       loadCars();
     }
 
@@ -110,7 +110,7 @@
     }
 
     async function loadCars() {
-      const { data, error } = await supabase.from('vehicles').select('*').order('created_at', { ascending: false });
+      const { data, error } = await sb.from('vehicles').select('*').order('created_at', { ascending: false });
       if (error) return console.error(error);
       const container = document.getElementById('cars');
       if (!data || data.length === 0) {
@@ -156,8 +156,7 @@
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
-        // Bucket exacto con V mayúscula tal como lo tienes en Supabase
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await sb.storage
           .from('Vehicles')
           .upload(fileName, file);
 
@@ -168,7 +167,7 @@
           return;
         }
 
-        const { data: publicUrlData } = supabase.storage
+        const { data: publicUrlData } = sb.storage
           .from('Vehicles')
           .getPublicUrl(fileName);
 
@@ -181,7 +180,7 @@
         model,
         year: year ? parseInt(year) : null,
         price: parseFloat(price),
-        km: km ? parseInt(km) : null,
+        mileage: km ? parseInt(km) : null,
         fuel,
         transmission,
         description,
@@ -189,15 +188,15 @@
         status: 'available'
       };
 
-      const { error } = await supabase.from('vehicles').insert(car);
+      const { error } = await sb.from('vehicles').insert(car);
       
       btn.textContent = 'Publicar Vehículo';
       btn.disabled = false;
 
       if (error) {
-        alert('Error al guardar en base de datos: ' + error.message);
+        alert('Error al guardar: ' + error.message);
       } else {
-        alert('¡Vehículo publicado con éxito! 🎉');
+        alert('¡Vehículo publicado con éxito!');
         document.getElementById('title').value = '';
         document.getElementById('brand').value = '';
         document.getElementById('model').value = '';
@@ -215,14 +214,14 @@
 
     async function deleteCar(id) {
       if (!confirm('¿Borrar este coche?')) return;
-      const { error } = await supabase.from('vehicles').delete().eq('id', id);
+      const { error } = await sb.from('vehicles').delete().eq('id', id);
       if (error) alert(error.message);
       else loadCars();
     }
 
     async function logout() {
-      await supabase.auth.signOut();
-      location.href = 'login.html';
+      await sb.auth.signOut();
+      location.href = 'panel-control.html';
     }
 
     initAdmin();
