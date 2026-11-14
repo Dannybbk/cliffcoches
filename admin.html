@@ -65,6 +65,10 @@
         <input id="km" type="number" placeholder="Kilómetros">
         <select id="fuel"><option>Diésel</option><option>Gasolina</option><option>Híbrido</option><option>Eléctrico</option></select>
         <select id="transmission"><option>Automático</option><option>Manual</option></select>
+        
+        <!-- CAMPO DE TELÉFONO AÑADIDO -->
+        <input class="form-full" id="phone" placeholder="Teléfono de contacto (ej: +34 600 000 000)" value="+34613801086">
+
         <textarea class="form-full" id="description" placeholder="Descripción" rows="2"></textarea>
         <input class="form-full" type="file" id="photo" accept="image/*">
         <button class="btn-primary form-full" id="saveBtn" onclick="saveCar()">Publicar</button>
@@ -146,6 +150,7 @@
         mileage: parseInt(document.getElementById('km').value) || null,
         fuel: document.getElementById('fuel').value,
         transmission: document.getElementById('transmission').value,
+        phone: document.getElementById('phone').value.trim(), // Guardamos el teléfono introducido
         description: document.getElementById('description').value.trim(),
         status: 'available'
       };
@@ -181,6 +186,7 @@
       document.getElementById('km').value = data.mileage || '';
       document.getElementById('fuel').value = data.fuel || 'Diésel';
       document.getElementById('transmission').value = data.transmission || 'Automático';
+      document.getElementById('phone').value = data.phone || '+34613801086'; // Cargamos el teléfono guardado
       document.getElementById('description').value = data.description || '';
       window.scrollTo(0,0);
     }
@@ -190,7 +196,9 @@
       document.getElementById('formTitle').textContent = 'Añadir Vehículo';
       document.getElementById('saveBtn').textContent = 'Publicar';
       document.getElementById('cancelBtn').style.display = 'none';
-      document.querySelectorAll('input,textarea').forEach(i => i.value = '');
+      document.querySelectorAll('input,textarea').forEach(i => {
+        if(i.id !== 'phone') i.value = '';
+      });
       document.getElementById('brand').value = '';
     }
 
