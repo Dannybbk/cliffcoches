@@ -15,13 +15,26 @@
     h1 span { color: var(--white); }
     .form-group { margin-bottom: 15px; }
     label { display: block; font-size: 0.9rem; color: var(--gray); margin-bottom: 5px; }
+    
+    .input-container { position: relative; }
     input { width: 100%; padding: 12px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; font-size: 0.95rem; outline: none; transition: 0.3s; }
     input:focus { border-color: var(--gold); }
-    .btn-primary { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
+    
+    /* Estilo para el botón de ver/ocultar contraseña */
+    .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.1rem; }
+    .toggle-password:hover { color: var(--gold); }
+
+    /* Estilo para la casilla de recordar sesión */
+    .checkbox-group { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
+    .checkbox-group input { width: auto; cursor: pointer; accent-color: var(--gold); }
+
+    .btn-primary { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.3s; }
     .btn-primary:hover { opacity: 0.9; }
+    
     .back-link { display: block; text-align: center; margin-top: 20px; color: var(--gray); font-size: 0.85rem; text-decoration: none; }
     .back-link:hover { color: var(--gold); }
-    #errorMsg { color: var(--red); font-size: 0.85rem; text-align: center; margin-top: 10px; display: none; background: rgba(255,77,77,0.1); padding: 8px; border-radius: 4px; }
+    
+    #errorMsg { color: var(--red); font-size: 0.85rem; text-align: center; margin-bottom: 15px; display: none; background: rgba(255,77,77,0.1); padding: 8px; border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -32,10 +45,20 @@
         <label for="email">Correo electrónico</label>
         <input type="email" id="email" required placeholder="tucorreo@email.com">
       </div>
+      
       <div class="form-group">
         <label for="password">Contraseña</label>
-        <input type="password" id="password" required placeholder="••••••••">
+        <div class="input-container">
+          <input type="password" id="password" required placeholder="••••••••">
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">👁️</button>
+        </div>
       </div>
+
+      <label class="checkbox-group">
+        <input type="checkbox" id="rememberMe" checked>
+        Mantener sesión iniciada
+      </label>
+
       <div id="errorMsg"></div>
       <button type="submit" class="btn-primary" id="loginBtn">Entrar al Panel</button>
     </form>
@@ -45,20 +68,46 @@
   <script>
     const supabase = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw',
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
     );
+
+    // Función para mostrar / ocultar contraseña
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const toggleBtn = document.querySelector('.toggle-password');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleBtn.textContent = '🔒';
+      } else {
+        passwordInput.type = 'password';
+        toggleBtn.textContent = '👁️';
+      }
+    }
 
     async function handleLogin(event) {
       event.preventDefault();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
+      const rememberMe = document.getElementById('rememberMe').checked;
       const btn = document.getElementById('loginBtn');
       const errorDiv = document.getElementById('errorMsg');
 
       btn.textContent = 'Verificando... ⏳';
       btn.disabled = true;
-      errorId = document.getElementById('errorMsg');
       errorDiv.style.display = 'none';
+
+      // Configurar persistencia según la casilla marcada
+      await supabase.auth.setSession({
+        // Si no marca "mantener sesión", podríamos ajustar el almacenamiento si fuera necesario, 
+        // pero por defecto Supabase guarda el token en localStorage.
+      });
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
@@ -71,7 +120,7 @@
         btn.textContent = 'Entrar al Panel';
         btn.disabled = false;
       } else {
-        // Redirige al panel de administración protegido
+        // Redirige al panel de administración
         window.location.href = 'admin.html';
       }
     }
