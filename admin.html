@@ -156,7 +156,7 @@
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
-        // Bucket exacto con V mayúscula tal como lo tienes en Supabase
+        // Bucket exacto con V mayúscula
         const { error: uploadError } = await supabase.storage
           .from('Vehicles')
           .upload(fileName, file);
