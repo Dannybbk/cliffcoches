@@ -71,7 +71,7 @@
       }
     );
 
-        async function handleLogin(event) {
+    async function handleLogin(event) {
       event.preventDefault();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
@@ -91,8 +91,6 @@
         if (errorDiv) {
           errorDiv.textContent = '⚠️ ' + error.message;
           errorDiv.style.display = 'block';
-        } else {
-          alert('Error: ' + error.message);
         }
         btn.textContent = 'Entrar al Panel';
         btn.disabled = false;
@@ -100,7 +98,6 @@
         window.location.href = 'admin.html';
       }
     }
-
   </script>
 </body>
 </html>
