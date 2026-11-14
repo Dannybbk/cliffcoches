@@ -103,13 +103,13 @@
       const fileInput = document.getElementById('carImageFile');
       if (fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
-        const fileName = Date.now() + '_' + file.name;
-        const { error: upErr } = await supabase.storage.from('vehicles').upload(fileName, file);
+        const fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+        const { error: upErr } = await supabase.storage.from('Vehicles').upload(fileName, file);
         if (upErr) {
           alert('Error subiendo foto: ' + upErr.message);
           return;
         }
-        const { data } = supabase.storage.from('vehicles').getPublicUrl(fileName);
+        const { data } = supabase.storage.from('Vehicles').getPublicUrl(fileName);
         imageUrl = data.publicUrl;
       }
 
@@ -132,7 +132,8 @@
         alert('Error al guardar: ' + error.message);
       } else {
         alert('¡Coche publicado!');
-        document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+        document.querySelectorAll('input, textarea').forEach(el => { if (el.type !== 'file') el.value = ''; });
+        fileInput.value = '';
         loadCars();
       }
     }
