@@ -10,15 +10,26 @@
     :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #141414; --white: #fff; --gray: #888; --red: #ff4d4d; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); padding: 15px; }
-    .container { max-width: 800px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: center; background: var(--dark); padding: 15px 20px; border-radius: 10px; border: 1px solid #222; margin-bottom: 20px; }
-    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.5rem; }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { display: flex; justify-content: space-between; align-items: center; background: var(--dark); padding: 16px 20px; border-radius: 12px; border: 1px solid #222; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.6rem; }
     .btn-secondary { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; }
-    .btn-danger { background: rgba(255,77,77,0.1); border: 1px solid var(--red); color: var(--red); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-    .card { background: var(--dark); padding: 20px; border-radius: 10px; border: 1px solid #222; margin-bottom: 20px; }
-    input, textarea, select { width: 100%; padding: 11px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; margin: 6px 0; }
+    .btn-danger { background: rgba(255,77,77,0.1); border: 1px solid var(--red); color: var(--red); padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+    .card { background: var(--dark); padding: 20px; border-radius: 12px; border: 1px solid #222; margin-bottom: 20px; }
+    input, textarea, select { width: 100%; padding: 12px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; margin: 6px 0; }
     .btn-primary { width: 100%; background: var(--gold); color: black; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin-top: 10px; }
-    .car-item { background: var(--dark); padding: 15px; border-radius: 8px; border: 1px solid #222; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; }
+    .car-item { background: var(--dark); padding: 16px; border-radius: 10px; border: 1px solid #222; margin: 10px 0; }
+    .car-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+    .status { font-size: 0.75rem; padding: 3px 8px; border-radius: 20px; font-weight: 600; }
+    .status.available { background: #00c86422; color: #00c864; }
+    .status.reserved { background: #ffa50022; color: #ffa500; }
+    .status.sold { background: #ff4d4d22; color: #ff4d4d; }
+    .car-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+    .car-actions button { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+    .btn-edit { background: rgba(212,175,55,0.15); border: 1px solid var(--gold); color: var(--gold); }
+    .btn-reserve { background: rgba(255,165,0,0.15); border: 1px solid #ffa500; color: #ffa500; }
+    .btn-sold { background: rgba(255,77,77,0.15); border: 1px solid #ff4d4d; color: #ff4d4d; }
+    .btn-del { background: rgba(255,77,77,0.1); border: 1px solid #ff4d4d; color: #ff4d4d; }
   </style>
 </head>
 <body>
@@ -32,75 +43,28 @@
     </header>
 
     <div class="card">
-      <h2>Añadir Vehículo</h2>
+      <h2 id="formTitle" style="margin-bottom:15px;">Añadir Vehículo</h2>
       <input id="title" placeholder="Título opcional">
       <select id="brand">
         <option value="">Selecciona Marca...</option>
-        <option>Abarth</option>
-        <option>Alfa Romeo</option>
-        <option>Aston Martin</option>
-        <option>Audi</option>
-        <option>Bentley</option>
-        <option>BMW</option>
-        <option>BYD</option>
-        <option>Chevrolet</option>
-        <option>Citroën</option>
-        <option>Cupra</option>
-        <option>Dacia</option>
-        <option>DS</option>
-        <option>Ferrari</option>
-        <option>Fiat</option>
-        <option>Ford</option>
-        <option>Honda</option>
-        <option>Hyundai</option>
-        <option>Infiniti</option>
-        <option>Jaguar</option>
-        <option>Jeep</option>
-        <option>Kia</option>
-        <option>Lamborghini</option>
-        <option>Land Rover</option>
-        <option>Lexus</option>
-        <option>Maserati</option>
-        <option>Mazda</option>
-        <option>McLaren</option>
-        <option>Mercedes-Benz</option>
-        <option>MG</option>
-        <option>MINI</option>
-        <option>Mitsubishi</option>
-        <option>Nissan</option>
-        <option>Opel</option>
-        <option>Peugeot</option>
-        <option>Porsche</option>
-        <option>Renault</option>
-        <option>Rolls-Royce</option>
-        <option>Seat</option>
-        <option>Skoda</option>
-        <option>Smart</option>
-        <option>Subaru</option>
-        <option>Suzuki</option>
-        <option>Tesla</option>
-        <option>Toyota</option>
-        <option>Volkswagen</option>
-        <option>Volvo</option>
-        <option>Otro</option>
+        <option>Abarth</option><option>Alfa Romeo</option><option>Audi</option><option>BMW</option>
+        <option>Citroën</option><option>Cupra</option><option>Dacia</option><option>Fiat</option>
+        <option>Ford</option><option>Honda</option><option>Hyundai</option><option>Jeep</option>
+        <option>Kia</option><option>Land Rover</option><option>Mazda</option><option>Mercedes-Benz</option>
+        <option>MINI</option><option>Nissan</option><option>Opel</option><option>Peugeot</option>
+        <option>Renault</option><option>Seat</option><option>Skoda</option><option>Tesla</option>
+        <option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Otro</option>
       </select>
       <input id="model" placeholder="Modelo">
       <input id="year" type="number" placeholder="Año">
-      <input id="price" type="number" placeholder="Precio">
+      <input id="price" type="number" placeholder="Precio (ej: 49500)">
       <input id="km" type="number" placeholder="Kilómetros">
-      <select id="fuel">
-        <option>Diésel</option>
-        <option>Gasolina</option>
-        <option>Híbrido</option>
-        <option>Eléctrico</option>
-      </select>
-      <select id="transmission">
-        <option>Automático</option>
-        <option>Manual</option>
-      </select>
+      <select id="fuel"><option>Diésel</option><option>Gasolina</option><option>Híbrido</option><option>Eléctrico</option></select>
+      <select id="transmission"><option>Automático</option><option>Manual</option></select>
       <textarea id="description" placeholder="Descripción" rows="2"></textarea>
       <input type="file" id="photo" accept="image/*">
-      <button class="btn-primary" onclick="addCar()">Publicar</button>
+      <button class="btn-primary" id="saveBtn" onclick="saveCar()">Publicar</button>
+      <button class="btn-secondary" id="cancelBtn" onclick="cancelEdit()" style="display:none;width:100%;margin-top:8px;">Cancelar</button>
     </div>
 
     <h2 style="color:var(--gold);margin-bottom:10px;">Vehículos Publicados</h2>
@@ -114,28 +78,47 @@
       { auth: { persistSession: true, autoRefreshToken: true } }
     );
 
+    let editingId = null;
+
     async function init() {
       const { data } = await sb.auth.getSession();
       if (!data.session) location.href = 'panel-control.html';
       else loadCars();
     }
 
+    function statusLabel(s) {
+      if (s === 'reserved') return 'Reservado';
+      if (s === 'sold') return 'Vendido';
+      return 'Disponible';
+    }
+
     async function loadCars() {
       const { data } = await sb.from('vehicles').select('*').order('created_at', { ascending: false });
       const container = document.getElementById('cars');
-      if (!data || !data.length) {
+      if (!data?.length) {
         container.innerHTML = '<p style="color:#888;text-align:center;">No hay coches.</p>';
         return;
       }
       container.innerHTML = data.map(c => `
         <div class="car-item">
-          <div><b>${c.brand} ${c.model}</b><br><small>${c.year||''} • ${c.price||''}€</small></div>
-          <button class="btn-danger" onclick="del('${c.id}')">Borrar</button>
+          <div class="car-header">
+            <div>
+              <b>${c.brand} ${c.model}</b>
+              <span class="status ${c.status||'available'}">${statusLabel(c.status)}</span>
+            </div>
+            <div style="color:#aaa;font-size:0.9rem;">${c.year||''} • ${c.price ? Number(c.price).toLocaleString('es-ES')+' €' : ''}</div>
+          </div>
+          <div class="car-actions">
+            <button class="btn-edit" onclick="editCar('${c.id}')">Editar</button>
+            <button class="btn-reserve" onclick="setStatus('${c.id}','reserved')">Reservado</button>
+            <button class="btn-sold" onclick="setStatus('${c.id}','sold')">Vendido</button>
+            <button class="btn-del" onclick="del('${c.id}')">Borrar</button>
+          </div>
         </div>
       `).join('');
     }
 
-    async function addCar() {
+    async function saveCar() {
       const brand = document.getElementById('brand').value;
       const model = document.getElementById('model').value.trim();
       const price = document.getElementById('price').value;
@@ -150,7 +133,7 @@
         image = sb.storage.from('Vehicles').getPublicUrl(name).data.publicUrl;
       }
 
-      const { error } = await sb.from('vehicles').insert({
+      const car = {
         title: document.getElementById('title').value.trim() || brand + ' ' + model,
         brand, model,
         year: parseInt(document.getElementById('year').value) || null,
@@ -159,21 +142,61 @@
         fuel: document.getElementById('fuel').value,
         transmission: document.getElementById('transmission').value,
         description: document.getElementById('description').value.trim(),
-        main_image: image,
         status: 'available'
-      });
+      };
+      if (image) car.main_image = image;
+
+      let error;
+      if (editingId) {
+        ({ error } = await sb.from('vehicles').update(car).eq('id', editingId));
+      } else {
+        ({ error } = await sb.from('vehicles').insert(car));
+      }
 
       if (error) alert('Error: ' + error.message);
       else {
-        alert('¡Publicado!');
-        document.querySelectorAll('input').forEach(i => i.value = '');
-        document.getElementById('brand').value = '';
+        alert(editingId ? 'Actualizado' : '¡Publicado!');
+        cancelEdit();
         loadCars();
       }
     }
 
+    async function editCar(id) {
+      const { data } = await sb.from('vehicles').select('*').eq('id', id).single();
+      if (!data) return;
+      editingId = id;
+      document.getElementById('formTitle').textContent = 'Editar Vehículo';
+      document.getElementById('saveBtn').textContent = 'Guardar cambios';
+      document.getElementById('cancelBtn').style.display = 'block';
+      document.getElementById('title').value = data.title || '';
+      document.getElementById('brand').value = data.brand || '';
+      document.getElementById('model').value = data.model || '';
+      document.getElementById('year').value = data.year || '';
+      document.getElementById('price').value = data.price || '';
+      document.getElementById('km').value = data.mileage || '';
+      document.getElementById('fuel').value = data.fuel || 'Diésel';
+      document.getElementById('transmission').value = data.transmission || 'Automático';
+      document.getElementById('description').value = data.description || '';
+      window.scrollTo(0,0);
+    }
+
+    function cancelEdit() {
+      editingId = null;
+      document.getElementById('formTitle').textContent = 'Añadir Vehículo';
+      document.getElementById('saveBtn').textContent = 'Publicar';
+      document.getElementById('cancelBtn').style.display = 'none';
+      document.querySelectorAll('input,textarea').forEach(i => i.value = '');
+      document.getElementById('brand').value = '';
+    }
+
+    async function setStatus(id, status) {
+      const { error } = await sb.from('vehicles').update({ status }).eq('id', id);
+      if (error) alert(error.message);
+      else loadCars();
+    }
+
     async function del(id) {
-      if (confirm('¿Borrar?')) {
+      if (confirm('¿Borrar este coche?')) {
         await sb.from('vehicles').delete().eq('id', id);
         loadCars();
       }
