@@ -62,18 +62,18 @@
       <div class="logo" style="margin-bottom:10px;">Cliff<span class="gold">Coches</span>.Net</div>
       <p>Selección exclusiva de coches nacionales verificados</p>
       <p style="margin-top:15px;color:#666;">© 2026 CliffCoches.Net</p>
-      <p style="margin-top:8px;"><a href="login.html" style="color:#aaa;font-size:0.85rem;text-decoration:underline;">Área privada</a></p>
+      <p style="margin-top:8px;"><a href="panel-control.html" style="color:#aaa;font-size:0.85rem;text-decoration:underline;">Área privada</a></p>
     </div>
   </footer>
 
   <script>
-    const supabase = window.supabase.createClient(
+    const sb = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
     );
 
     async function loadCars() {
-      const { data, error } = await supabase
+      const { data, error } = await sb
         .from('vehicles')
         .select('*')
         .eq('status', 'available')
