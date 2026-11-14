@@ -71,7 +71,7 @@
       }
     );
 
-    async function handleLogin(event) {
+        async function handleLogin(event) {
       event.preventDefault();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
@@ -80,7 +80,7 @@
 
       btn.textContent = 'Verificando... ⏳';
       btn.disabled = true;
-      errorDiv.style.display = 'none';
+      if (errorDiv) errorDiv.style.display = 'none';
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
@@ -88,14 +88,19 @@
       });
 
       if (error) {
-        errorDiv.textContent = '⚠️ ' + error.message;
-        errorDiv.style.display = 'block';
+        if (errorDiv) {
+          errorDiv.textContent = '⚠️ ' + error.message;
+          errorDiv.style.display = 'block';
+        } else {
+          alert('Error: ' + error.message);
+        }
         btn.textContent = 'Entrar al Panel';
         btn.disabled = false;
       } else {
         window.location.href = 'admin.html';
       }
     }
+
   </script>
 </body>
 </html>
