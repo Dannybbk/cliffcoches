@@ -3,26 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin</title>
+  <title>Admin - CliffCoches</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body{font-family:system-ui;background:#0a0a0a;color:#fff;padding:15px}
-    input,select,textarea,button{width:100%;padding:12px;margin:6px 0;background:#222;color:#fff;border:1px solid #444;border-radius:6px}
-    button{background:#d4af37;color:#000;font-weight:bold;cursor:pointer}
-    .msg{background:#222;padding:10px;margin:10px 0;border-radius:6px;min-height:40px}
+    body{font-family:system-ui;background:#0a0a0a;color:#fff;padding:15px;max-width:600px;margin:auto;}
+    input,select,textarea,button{width:100%;padding:12px;margin:6px 0;background:#222;color:#fff;border:1px solid #444;border-radius:6px;box-sizing:border-box;}
+    button{background:#d4af37;color:#000;font-weight:bold;cursor:pointer;font-size:16px;}
+    .msg{background:#111;padding:12px;margin:10px 0;border-radius:6px;min-height:40px;border:1px solid #333;font-weight:bold;text-align:center;}
   </style>
 </head>
 <body>
-  <h2>Admin CliffCoches</h2>
-  <a href="index.html" style="color:#d4af37">← Ver web</a>
-  <div class="msg" id="msg">Listo</div>
+  <h2>Añadir Nuevo Vehículo</h2>
+  <a href="index.html" style="color:#d4af37;text-decoration:none;">← Ver web</a>
+  <div class="msg" id="msg">Listo para publicar</div>
 
-  <input id="brand" placeholder="Marca">
-  <input id="model" placeholder="Modelo">
-  <input id="price" type="number" placeholder="Precio">
+  <input id="title" placeholder="Título opcional (ej: Impecable)">
+  <input id="brand" placeholder="Marca (ej: BMW)">
+  <input id="model" placeholder="Modelo (ej: Serie 3)">
+  <input id="year" type="number" placeholder="Año (ej: 2022)">
+  <input id="price" type="number" placeholder="Precio (€)">
+  <input id="km" type="number" placeholder="Kilómetros">
+  
+  <select id="fuel">
+    <option value="Gasolina">Gasolina</option>
+    <option value="Diésel">Diésel</option>
+    <option value="Híbrido">Híbrido</option>
+    <option value="Eléctrico">Eléctrico</option>
+  </select>
+
+  <select id="transmission">
+    <option value="Automático">Automático</option>
+    <option value="Manual">Manual</option>
+  </select>
+
+  <textarea id="description" placeholder="Descripción detallada (extras, estado...)"></textarea>
+
+  <label style="display:block;margin-top:10px;color:#d4af37;font-size:14px;">Foto del coche:</label>
   <input type="file" id="photo" accept="image/*">
-  <button onclick="publish()">PUBLICAR</button>
 
+  <button onclick="publish()">Publicar Vehículo</button>
+
+  <h3 style="margin-top:30px;">Vehículos Publicados</h3>
   <div id="list"></div>
 
   <script>
@@ -35,11 +56,20 @@
 
     async function publish(){
       try {
-        log('Publicando...');
+        log('Publicando anuncio...');
+        const title = document.getElementById('title').value;
         const brand = document.getElementById('brand').value;
         const model = document.getElementById('model').value;
+        const year = document.getElementById('year').value;
         const price = document.getElementById('price').value;
-        if(!brand || !model || !price) return log('Faltan datos obligatorios');
+        const km = document.getElementById('km').value;
+        const fuel = document.getElementById('fuel').value;
+        const transmission = document.getElementById('transmission').value;
+        const description = document.getElementById('description').value;
+
+        if(!brand || !model || !price) {
+          return log('⚠️ Faltan datos obligatorios (Marca, Modelo o Precio)');
+        }
 
         let img = null;
         const fileInput = document.getElementById('photo');
@@ -57,18 +87,33 @@
           img = publicUrlData.data.publicUrl;
         }
 
-        log('Guardando coche en BD...');
+        log('Guardando en base de datos...');
         const { error: e2 } = await sb.from('vehicles').insert({
-          brand, model, price: parseFloat(price), main_image: img, status: 'available', title: brand + ' ' + model
+          title: title || (brand + ' ' + model),
+          brand,
+          model,
+          year: year ? parseInt(year) : null,
+          price: parseFloat(price),
+          km: km ? parseInt(km) : null,
+          fuel,
+          transmission,
+          description,
+          main_image: img,
+          status: 'available'
         });
         
         if(e2) {
-          log('Error guardar: ' + e2.message);
+          log('Error al guardar: ' + e2.message);
         } else {
-          log('¡PUBLICADO CON ÉXITO!');
+          log('¡PUBLICADO CON ÉXITO! 🎉');
+          // Limpiar campos
+          document.getElementById('title').value = '';
           document.getElementById('brand').value = '';
           document.getElementById('model').value = '';
+          document.getElementById('year').value = '';
           document.getElementById('price').value = '';
+          document.getElementById('km').value = '';
+          document.getElementById('description').value = '';
           fileInput.value = '';
           load();
         }
@@ -80,7 +125,12 @@
     async function load(){
       const { data, error } = await sb.from('vehicles').select('*').order('created_at', { ascending: false });
       if(error) return log('Error cargar: ' + error.message);
-      document.getElementById('list').innerHTML = (data || []).map(c => `<div style="background:#111;padding:10px;margin:5px 0">${c.brand} ${c.model} - ${c.price}€</div>`).join('');
+      document.getElementById('list').innerHTML = (data || []).map(c => `
+        <div style="background:#111;padding:12px;margin:8px 0;border-radius:6px;border:1px solid #333;">
+          <strong>${c.brand} ${c.model}</strong> - ${c.price}€<br>
+          <span style="font-size:12px;color:#aaa;">${c.year || ''} • ${c.km || 0} km • ${c.fuel || ''}</span>
+        </div>
+      `).join('');
     }
 
     sb.auth.getSession().then(({ data }) => {
