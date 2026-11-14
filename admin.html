@@ -11,212 +11,128 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); padding: 15px; }
     .container { max-width: 800px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: center; background: var(--dark); padding: 15px 20px; border-radius: 10px; border: 1px solid #222; margin-bottom: 20px; gap: 10px; }
+    header { display: flex; justify-content: space-between; align-items: center; background: var(--dark); padding: 15px 20px; border-radius: 10px; border: 1px solid #222; margin-bottom: 20px; }
     h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.5rem; }
-    .nav-actions { display: flex; gap: 8px; }
-    .btn-secondary { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; }
-    .btn-danger { background: rgba(255, 77, 77, 0.1); border: 1px solid var(--red); color: var(--red); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-    .card { background: var(--dark); padding: 20px; border-radius: 10px; border: 1px solid #222; margin-bottom: 30px; }
-    .card h2 { font-family: 'Playfair Display', serif; margin-bottom: 15px; color: var(--white); font-size: 1.2rem; border-bottom: 1px solid #222; padding-bottom: 8px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .form-full { grid-column: 1 / -1; }
-    input, textarea, select { width: 100%; padding: 11px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; font-size: 0.95rem; outline: none; }
-    .file-upload-box { background: #1c1c1c; border: 1px dashed #555; padding: 12px; text-align: center; border-radius: 6px; cursor: pointer; font-size: 0.9rem; color: #ccc; display: block; }
-    .file-upload-box input { display: none; }
-    .btn-primary { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 1rem; margin-top: 10px; }
-    .cars-list { display: grid; gap: 10px; }
-    .car-item { background: var(--dark); padding: 15px; border-radius: 8px; border: 1px solid #222; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .car-info strong { color: var(--gold); font-size: 1rem; }
-    .car-info p { color: var(--gray); font-size: 0.85rem; margin-top: 3px; }
+    .btn-secondary { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+    .btn-danger { background: rgba(255,77,77,0.1); border: 1px solid var(--red); color: var(--red); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    .card { background: var(--dark); padding: 20px; border-radius: 10px; border: 1px solid #222; margin-bottom: 20px; }
+    input, textarea, select { width: 100%; padding: 11px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; margin: 6px 0; }
+    .btn-primary { width: 100%; background: var(--gold); color: black; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin-top: 10px; }
+    .car-item { background: var(--dark); padding: 15px; border-radius: 8px; border: 1px solid #222; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>Panel Admin</h1>
-      <div class="nav-actions">
-        <a href="index.html" class="btn-secondary">🏠 Ver Web</a>
+      <div>
+        <a href="index.html" class="btn-secondary">Ver Web</a>
         <button onclick="logout()" class="btn-danger">Cerrar sesión</button>
       </div>
     </header>
 
     <div class="card">
-      <h2>Añadir Nuevo Vehículo</h2>
-      <div class="form-grid">
-        <input class="form-full" id="title" placeholder="Título opcional (ej: Impecable)" />
-        <select id="brand" class="form-full">
-          <option value="">Selecciona Marca...</option>
-          <option value="Audi">Audi</option>
-          <option value="BMW">BMW</option>
-          <option value="Cupra">Cupra</option>
-          <option value="Ford">Ford</option>
-          <option value="Mercedes-Benz">Mercedes-Benz</option>
-          <option value="Peugeot">Peugeot</option>
-          <option value="Renault">Renault</option>
-          <option value="Seat">Seat</option>
-          <option value="Toyota">Toyota</option>
-          <option value="Volkswagen">Volkswagen</option>
-          <option value="Volvo">Volvo</option>
-          <option value="Otro">Otra marca</option>
-        </select>
-        <input id="model" class="form-full" placeholder="Modelo (ej: Serie 3, Golf...)" />
-        <input id="year" type="number" placeholder="Año (ej: 2022)" />
-        <input id="price" type="number" placeholder="Precio (€)" />
-        <input id="km" type="number" placeholder="Kilómetros" />
-        <select id="fuel">
-          <option value="Diésel">Diésel</option>
-          <option value="Gasolina">Gasolina</option>
-          <option value="Híbrido">Híbrido</option>
-          <option value="Eléctrico">Eléctrico</option>
-        </select>
-        <select id="transmission">
-          <option value="Automático">Automático</option>
-          <option value="Manual">Manual</option>
-        </select>
-        <textarea class="form-full" id="description" placeholder="Descripción detallada..." rows="2"></textarea>
-        <div class="form-full">
-          <label class="file-upload-box" id="fileLabel">
-            📷 Añadir foto (Cámara o Galería)
-            <input type="file" id="carImageFile" accept="image/*" onchange="updateFileName(this)">
-          </label>
-        </div>
-        <button id="pubBtn" class="btn-primary form-full" onclick="addCar()">Publicar Vehículo</button>
-      </div>
+      <h2>Añadir Vehículo</h2>
+      <input id="title" placeholder="Título opcional">
+      <input id="brand" placeholder="Marca">
+      <input id="model" placeholder="Modelo">
+      <input id="year" type="number" placeholder="Año">
+      <input id="price" type="number" placeholder="Precio">
+      <input id="km" type="number" placeholder="Kilómetros">
+      <select id="fuel">
+        <option>Diésel</option>
+        <option>Gasolina</option>
+        <option>Híbrido</option>
+        <option>Eléctrico</option>
+      </select>
+      <select id="transmission">
+        <option>Automático</option>
+        <option>Manual</option>
+      </select>
+      <textarea id="description" placeholder="Descripción" rows="2"></textarea>
+      <input type="file" id="photo" accept="image/*">
+      <button class="btn-primary" onclick="addCar()">Publicar</button>
     </div>
 
-    <h2 style="font-family:'Playfair Display',serif;margin-bottom:15px;color:var(--gold);font-size:1.2rem;">Vehículos Publicados</h2>
-    <div id="cars" class="cars-list"></div>
+    <h2 style="color:var(--gold);margin-bottom:10px;">Vehículos Publicados</h2>
+    <div id="cars"></div>
   </div>
 
   <script>
     const sb = window.supabase.createClient(
       'https://axeolovhcpqcubkachez.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw',
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
     );
 
-    async function initAdmin() {
-      const { data: { session } } = await sb.auth.getSession();
-      if (!session) { location.href = 'panel-control.html'; return; }
-      loadCars();
-    }
-
-    function updateFileName(input) {
-      const label = document.getElementById('fileLabel');
-      if (input.files && input.files[0]) {
-        label.style.borderColor = 'var(--gold)';
-        label.style.color = 'var(--gold)';
-        label.innerHTML = `✅ ${input.files[0].name}`;
-      }
+    async function init() {
+      const { data } = await sb.auth.getSession();
+      if (!data.session) location.href = 'panel-control.html';
+      else loadCars();
     }
 
     async function loadCars() {
-      const { data, error } = await sb.from('vehicles').select('*').order('created_at', { ascending: false });
-      if (error) return console.error(error);
+      const { data } = await sb.from('vehicles').select('*').order('created_at', { ascending: false });
       const container = document.getElementById('cars');
-      if (!data || data.length === 0) {
-        container.innerHTML = '<p style="color:var(--gray);text-align:center;padding:15px;font-size:0.9rem;">No hay vehículos publicados todavía.</p>';
+      if (!data || !data.length) {
+        container.innerHTML = '<p style="color:#888;text-align:center;">No hay coches.</p>';
         return;
       }
-      container.innerHTML = data.map(car => `
+      container.innerHTML = data.map(c => `
         <div class="car-item">
-          <div class="car-info">
-            <strong>${car.brand} ${car.model}</strong>
-            <p>${car.year || ''} • ${car.price ? car.price.toLocaleString() + ' €' : ''} • ${car.km || car.mileage || 0} km</p>
-          </div>
-          <button class="btn-danger" style="padding:6px 10px;font-size:0.8rem;" onclick="deleteCar('${car.id}')">Borrar</button>
+          <div><b>${c.brand} ${c.model}</b><br><small>${c.year||''} • ${c.price||''}€</small></div>
+          <button class="btn-danger" onclick="del('${c.id}')">Borrar</button>
         </div>
       `).join('');
     }
 
     async function addCar() {
-      const btn = document.getElementById('pubBtn');
-      const title = document.getElementById('title').value.trim();
-      const brand = document.getElementById('brand').value;
+      const brand = document.getElementById('brand').value.trim();
       const model = document.getElementById('model').value.trim();
-      const year = document.getElementById('year').value;
       const price = document.getElementById('price').value;
-      const km = document.getElementById('km').value;
-      const fuel = document.getElementById('fuel').value;
-      const transmission = document.getElementById('transmission').value;
-      const description = document.getElementById('description').value.trim();
-      const fileInput = document.getElementById('carImageFile');
+      if (!brand || !model || !price) return alert('Marca, modelo y precio son obligatorios');
 
-      if (!brand || !model || !price) {
-        alert('Por favor, selecciona Marca, Modelo y Precio.');
-        return;
+      let image = null;
+      const file = document.getElementById('photo').files[0];
+      if (file) {
+        const name = Date.now() + '_' + file.name.replace(/[^a-z0-9.]/gi, '_');
+        const { error } = await sb.storage.from('Vehicles').upload(name, file);
+        if (error) return alert('Error foto: ' + error.message);
+        image = sb.storage.from('Vehicles').getPublicUrl(name).data.publicUrl;
       }
 
-      btn.textContent = 'Subiendo y publicando... ⏳';
-      btn.disabled = true;
-
-      let imageUrl = null;
-
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-
-        const { error: uploadError } = await sb.storage
-          .from('Vehicles')
-          .upload(fileName, file);
-
-        if (uploadError) {
-          alert('Error al subir la foto: ' + uploadError.message);
-          btn.textContent = 'Publicar Vehículo';
-          btn.disabled = false;
-          return;
-        }
-
-        const { data: publicUrlData } = sb.storage
-          .from('Vehicles')
-          .getPublicUrl(fileName);
-
-        imageUrl = publicUrlData.publicUrl;
-      }
-
-      const car = {
-        title: title || `${brand} ${model}`,
-        brand,
-        model,
-        year: year ? parseInt(year) : null,
+      const { error } = await sb.from('vehicles').insert({
+        title: document.getElementById('title').value.trim() || brand + ' ' + model,
+        brand, model,
+        year: parseInt(document.getElementById('year').value) || null,
         price: parseFloat(price),
-        mileage: km ? parseInt(km) : null,
-        fuel,
-        transmission,
-        description,
-        main_image: imageUrl,
+        mileage: parseInt(document.getElementById('km').value) || null,
+        fuel: document.getElementById('fuel').value,
+        transmission: document.getElementById('transmission').value,
+        description: document.getElementById('description').value.trim(),
+        main_image: image,
         status: 'available'
-      };
+      });
 
-      const { error } = await sb.from('vehicles').insert(car);
-      
-      btn.textContent = 'Publicar Vehículo';
-      btn.disabled = false;
-
-      if (error) {
-        alert('Error al guardar: ' + error.message);
-      } else {
-        alert('¡Vehículo publicado con éxito!');
-        document.getElementById('title').value = '';
-        document.getElementById('brand').value = '';
-        document.getElementById('model').value = '';
-        document.getElementById('year').value = '';
-        document.getElementById('price').value = '';
-        document.getElementById('km').value = '';
-        document.getElementById('description').value = '';
-        fileInput.value = '';
-        document.getElementById('fileLabel').style.borderColor = '#555';
-        document.getElementById('fileLabel').style.color = '#ccc';
-        document.getElementById('fileLabel').innerHTML = '📷 Añadir foto (Cámara o Galería)';
+      if (error) alert('Error: ' + error.message);
+      else {
+        alert('¡Publicado!');
+        document.querySelectorAll('input').forEach(i => i.value = '');
         loadCars();
       }
     }
 
-    async function deleteCar(id) {
-      if (!confirm('¿Borrar este coche?')) return;
-      const { error } = await sb.from('vehicles').delete().eq('id', id);
-      if (error) alert(error.message);
-      else loadCars();
+    async function del(id) {
+      if (confirm('¿Borrar?')) {
+        await sb.from('vehicles').delete().eq('id', id);
+        loadCars();
+      }
     }
 
     async function logout() {
@@ -224,7 +140,7 @@
       location.href = 'panel-control.html';
     }
 
-    initAdmin();
+    init();
   </script>
 </body>
 </html>
