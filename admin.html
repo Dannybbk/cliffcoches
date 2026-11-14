@@ -6,55 +6,47 @@
   <title>Panel Admin | CliffCoches.Net</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #111; --white: #fff; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; background: var(--black); color: var(--white); padding: 15px; }
-    .container { max-width: 700px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    h1 { color: var(--gold); }
-    button, .btn { background: var(--gold); color: black; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; }
-    .btn-danger { background: #ff4d4d; color: white; }
-    .card { background: var(--dark); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-    input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; background: #222; border: 1px solid #333; color: white; border-radius: 6px; }
-    .cars { display: grid; gap: 10px; }
-    .car { background: var(--dark); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+    body { font-family: system-ui, sans-serif; background: #0A0A0A; color: white; padding: 15px; margin: 0; }
+    .container { max-width: 650px; margin: 0 auto; }
+    h1 { color: #D4AF37; }
+    button, a.btn { background: #D4AF37; color: black; border: none; padding: 10px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block; margin: 5px; cursor: pointer; }
+    .danger { background: #ff4d4d; color: white; }
+    .card { background: #111; padding: 20px; border-radius: 10px; margin: 15px 0; }
+    input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; background: #222; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
+    .car { background: #111; padding: 12px; margin: 8px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>Panel Admin</h1>
-      <div>
-        <a href="index.html" class="btn" style="margin-right:8px;">Ver web</a>
-        <button onclick="logout()" class="btn-danger">Salir</button>
-      </div>
-    </header>
+    <h1>Panel Admin</h1>
+    <a href="index.html" class="btn">Ver web</a>
+    <button onclick="logout()" class="danger">Salir</button>
 
     <div class="card">
       <h2>Añadir coche</h2>
-      <input id="title" placeholder="Título (opcional)" />
-      <input id="brand" placeholder="Marca" />
-      <input id="model" placeholder="Modelo" />
-      <input id="year" type="number" placeholder="Año" />
-      <input id="price" type="number" placeholder="Precio (€)" />
-      <input id="mileage" type="number" placeholder="Kilómetros" />
+      <input id="title" placeholder="Título (opcional)">
+      <input id="brand" placeholder="Marca">
+      <input id="model" placeholder="Modelo">
+      <input id="year" type="number" placeholder="Año">
+      <input id="price" type="number" placeholder="Precio">
+      <input id="mileage" type="number" placeholder="Kilómetros">
       <select id="fuel">
-        <option value="Diésel">Diésel</option>
-        <option value="Gasolina">Gasolina</option>
-        <option value="Híbrido">Híbrido</option>
-        <option value="Eléctrico">Eléctrico</option>
+        <option>Diésel</option>
+        <option>Gasolina</option>
+        <option>Híbrido</option>
+        <option>Eléctrico</option>
       </select>
       <select id="transmission">
-        <option value="Automático">Automático</option>
-        <option value="Manual">Manual</option>
+        <option>Automático</option>
+        <option>Manual</option>
       </select>
       <textarea id="description" placeholder="Descripción" rows="3"></textarea>
-      <input type="file" id="carImageFile" accept="image/*" />
-      <button onclick="addCar()" style="width:100%;margin-top:10px;">Publicar vehículo</button>
+      <input type="file" id="photo" accept="image/*">
+      <button onclick="publish()" style="width:100%;">Publicar</button>
     </div>
 
-    <h2 style="margin-bottom:10px;color:var(--gold);">Coches publicados</h2>
-    <div id="cars" class="cars"></div>
+    <h2 style="color:#D4AF37;">Coches publicados</h2>
+    <div id="list"></div>
   </div>
 
   <script>
@@ -63,94 +55,76 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
     );
 
-    async function initAdmin() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        window.location.href = 'login.html';
-        return;
-      }
-      loadCars();
+    async function check() {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) location.href = 'login.html';
+      else load();
     }
 
-    async function loadCars() {
-      const { data, error } = await supabase.from('vehicles').select('*').order('created_at', { ascending: false });
-      const container = document.getElementById('cars');
-      if (error || !data?.length) {
-        container.innerHTML = '<p style="color:#888;text-align:center;">No hay coches.</p>';
+    async function load() {
+      const { data } = await supabase.from('vehicles').select('*').order('created_at', { ascending: false });
+      const list = document.getElementById('list');
+      if (!data || !data.length) {
+        list.innerHTML = '<p>No hay coches.</p>';
         return;
       }
-      container.innerHTML = data.map(car => `
+      list.innerHTML = data.map(c => `
         <div class="car">
-          <div>
-            <strong>${car.brand} ${car.model}</strong><br>
-            <small>${car.year || ''} • ${car.price || ''} € • ${car.fuel || ''}</small>
-          </div>
-          <button class="btn-danger" onclick="deleteCar('${car.id}')">Borrar</button>
+          <div><b>${c.brand} ${c.model}</b><br><small>${c.year||''} • ${c.price||''}€</small></div>
+          <button class="danger" onclick="del('${c.id}')">Borrar</button>
         </div>
       `).join('');
     }
 
-    async function addCar() {
+    async function publish() {
       const brand = document.getElementById('brand').value.trim();
       const model = document.getElementById('model').value.trim();
       const price = document.getElementById('price').value;
-      if (!brand || !model || !price) {
-        alert('Marca, modelo y precio son obligatorios');
-        return;
+      if (!brand || !model || !price) return alert('Marca, modelo y precio son obligatorios');
+
+      let image = null;
+      const file = document.getElementById('photo').files[0];
+      if (file) {
+        const name = Date.now() + '_' + file.name.replace(/[^a-z0-9.]/gi, '_');
+        const { error } = await supabase.storage.from('Vehicles').upload(name, file);
+        if (error) return alert('Error foto: ' + error.message);
+        image = supabase.storage.from('Vehicles').getPublicUrl(name).data.publicUrl;
       }
 
-      let imageUrl = null;
-      const fileInput = document.getElementById('carImageFile');
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-        const { error: upErr } = await supabase.storage.from('Vehicles').upload(fileName, file);
-        if (upErr) {
-          alert('Error subiendo foto: ' + upErr.message);
-          return;
-        }
-        const { data } = supabase.storage.from('Vehicles').getPublicUrl(fileName);
-        imageUrl = data.publicUrl;
-      }
-
-      const car = {
-        title: document.getElementById('title').value.trim() || (brand + ' ' + model),
-        brand,
-        model,
+      const { error } = await supabase.from('vehicles').insert({
+        title: document.getElementById('title').value.trim() || brand + ' ' + model,
+        brand, model,
         year: parseInt(document.getElementById('year').value) || null,
         price: parseFloat(price),
         mileage: parseInt(document.getElementById('mileage').value) || null,
         fuel: document.getElementById('fuel').value,
         transmission: document.getElementById('transmission').value,
         description: document.getElementById('description').value.trim(),
-        main_image: imageUrl,
+        main_image: image,
         status: 'available'
-      };
+      });
 
-      const { error } = await supabase.from('vehicles').insert(car);
-      if (error) {
-        alert('Error al guardar: ' + error.message);
-      } else {
-        alert('¡Coche publicado!');
-        document.querySelectorAll('input, textarea').forEach(el => { if (el.type !== 'file') el.value = ''; });
-        fileInput.value = '';
-        loadCars();
+      if (error) alert('Error: ' + error.message);
+      else {
+        alert('¡Publicado!');
+        document.querySelectorAll('input').forEach(i => i.value = '');
+        load();
       }
     }
 
-    async function deleteCar(id) {
-      if (!confirm('¿Borrar este coche?')) return;
-      const { error } = await supabase.from('vehicles').delete().eq('id', id);
-      if (error) alert(error.message);
-      else loadCars();
+    async function del(id) {
+      if (confirm('¿Borrar?')) {
+        await supabase.from('vehicles').delete().eq('id', id);
+        load();
+      }
     }
 
     async function logout() {
       await supabase.auth.signOut();
-      window.location.href = 'login.html';
+      location.href = 'login.html';
     }
 
-    initAdmin();
+    check();
   </script>
 </body>
 </html>
