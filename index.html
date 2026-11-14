@@ -12,6 +12,7 @@
       --dark: #141414; 
       --card-bg: #181818;
       --gold: #D4AF37; 
+      --gold-hover: #e6c555;
       --white: #fff; 
       --gray: #999; 
       --border: #262626;
@@ -78,10 +79,12 @@
     }
 
     .hero {
-      min-height: 75vh;
-      background: linear-gradient(to bottom, rgba(8,8,8,0.65), rgba(8,8,8,0.95)), 
+      min-height: 80vh;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.7), rgba(8,8,8,0.96)), 
                   url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
       display: flex;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
       text-align: center;
       padding: 140px 20px 80px;
@@ -91,7 +94,7 @@
     .hero h1 {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2.3rem, 4vw, 3.5rem);
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       line-height: 1.2;
       font-weight: 700;
     }
@@ -99,25 +102,56 @@
     .hero-text {
       font-size: 1.05rem;
       color: #d1d1d1;
-      max-width: 650px;
-      margin: 0 auto;
+      max-width: 680px;
+      margin: 0 auto 30px;
       line-height: 1.7;
-      background: rgba(20, 20, 20, 0.65);
+      background: rgba(20, 20, 20, 0.7);
       padding: 25px;
       border-radius: 12px;
       border: 1px solid var(--border);
       backdrop-filter: blur(8px);
     }
 
-    .hero-text p { margin: 8px 0; }
+    .hero-text p { margin: 6px 0; }
+
+    /* Insignias de Confianza */
+    .features-bar {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--white);
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 18px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+    }
+
+    .feature-item span { color: var(--gold); font-size: 1.1rem; }
 
     section { padding: 80px 0; }
 
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
     .section-title {
-      text-align: center;
       font-family: 'Playfair Display', serif;
       font-size: 2.4rem;
-      margin-bottom: 50px;
+      position: relative;
     }
 
     .section-title::after {
@@ -126,10 +160,40 @@
       width: 60px;
       height: 3px;
       background: var(--gold);
-      margin: 15px auto 0;
+      margin: 12px 0 0;
       border-radius: 2px;
     }
 
+    /* Barra de Búsqueda / Filtro Rápido */
+    .search-box {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 320px;
+      transition: border-color 0.3s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--gold);
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--white);
+      font-size: 0.9rem;
+      width: 100%;
+      padding-left: 8px;
+    }
+
+    .search-box input::placeholder { color: var(--gray); }
+
+    /* Cars Grid */
     .cars-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -217,6 +281,8 @@
 
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.2rem; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+      .search-box { max-width: 100%; }
       .cars-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -235,17 +301,31 @@
       <h1>Vehículos Premium<br><span class="gold">Selección Nacional</span></h1>
       <div class="hero-text">
         <p>Selección exclusiva de vehículos nacionales e importados verificados.</p>
-        <p>20 años de experiencia en Canadá. Ahora en España.</p>
+        <p><strong>20 años de experiencia en Canadá. Ahora en España.</strong></p>
         <p>Asesoramiento personalizado en la compra y venta de vehículos.</p>
         <p>Profesionalidad, transparencia y atención directa en cada operación.</p>
         <p>Tu confianza es mi mejor garantía.</p>
+      </div>
+
+      <!-- Insignias de confianza profesionales -->
+      <div class="features-bar">
+        <div class="feature-item"><span>✓</span> Vehículos Verificados</div>
+        <div class="feature-item"><span>★</span> 20 Años de Experiencia</div>
+        <div class="feature-item"><span>🛡️</span> Garantía y Confianza</div>
       </div>
     </div>
   </section>
 
   <section id="vehiculos">
     <div class="container">
-      <h2 class="section-title">Vehículos Disponibles</h2>
+      <div class="section-header">
+        <h2 class="section-title">Vehículos Disponibles</h2>
+        <!-- Buscador instantáneo -->
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" id="searchInput" placeholder="Buscar marca, modelo..." oninput="filterCars()">
+        </div>
+      </div>
       <div id="cars" class="cars-grid"></div>
     </div>
   </section>
@@ -265,6 +345,8 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
     );
 
+    let allCars = [];
+
     function formatPrice(p) {
       if (!p && p !== 0) return 'Consultar';
       let num = String(p).replace(/\./g, '').replace(',', '.');
@@ -273,25 +355,27 @@
       return num.toLocaleString('es-ES') + ' €';
     }
 
-    async function loadCars() {
-      const { data } = await sb.from('vehicles').select('*').in('status',['available','reserved','sold']).order('created_at',{ascending:false});
+    function renderCars(carsToRender) {
       const container = document.getElementById('cars');
       if (!container) return;
-      if (!data?.length) {
-        container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;">No hay vehículos disponibles.</p>';
+      
+      if (!carsToRender?.length) {
+        container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;padding:40px 0;">No se encontraron vehículos.</p>';
         return;
       }
-      container.innerHTML = data.map(car => {
+
+      container.innerHTML = carsToRender.map(car => {
         let banner = '';
         if (car.status === 'reserved') banner = '<div class="banner">RESERVADO</div>';
         if (car.status === 'sold') banner = '<div class="banner sold">VENDIDO</div>';
+        const carTitle = car.title || (car.brand + ' ' + car.model);
         return `
           <a href="coche.html?id=${car.id}" class="car-card">
             <div class="car-image" style="background-image:url('${car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}')">
               ${banner}
             </div>
             <div class="car-info">
-              <h3>${car.title || car.brand + ' ' + car.model}</h3>
+              <h3>${carTitle}</h3>
               <div class="details">${car.year||''} • ${car.mileage ? Number(car.mileage).toLocaleString('es-ES')+' km' : ''} • ${car.fuel||''}</div>
               <div class="price">${formatPrice(car.price)}</div>
             </div>
@@ -299,6 +383,26 @@
         `;
       }).join('');
     }
+
+    function filterCars() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allCars.filter(car => {
+        const title = (car.title || car.brand + ' ' + car.model || '').toLowerCase();
+        return title.includes(query);
+      });
+      renderCars(filtered);
+    }
+
+    async function loadCars() {
+      const { data, error } = await sb.from('vehicles').select('*').in('status',['available','reserved','sold']).order('created_at',{ascending:false});
+      if (error) {
+        console.error('Error:', error);
+        return;
+      }
+      allCars = data || [];
+      renderCars(allCars);
+    }
+
     loadCars();
   </script>
 </body>
