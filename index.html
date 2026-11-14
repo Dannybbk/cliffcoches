@@ -74,8 +74,11 @@
     );
 
     function formatPrice(p) {
-      if (!p) return 'Consultar';
-      return Number(p).toLocaleString('es-ES') + ' €';
+      if (!p && p !== 0) return 'Consultar';
+      let num = String(p).replace(/\./g, '').replace(',', '.');
+      num = parseFloat(num);
+      if (isNaN(num)) return 'Consultar';
+      return num.toLocaleString('es-ES') + ' €';
     }
 
     async function loadCars() {
