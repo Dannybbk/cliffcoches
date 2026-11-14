@@ -19,18 +19,18 @@
     .btn{background:var(--gold);color:var(--black);padding:12px 28px;border-radius:4px;text-decoration:none;font-weight:600;display:inline-block;}
     .hero{min-height:70vh;background:linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.75)),url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;display:flex;align-items:center;text-align:center;padding:140px 20px 80px;}
     .hero h1{font-family:'Playfair Display',serif;font-size:2.8rem;margin-bottom:20px;line-height:1.2;}
-    .hero p{font-size:1.05rem;margin-bottom:30px;color:#ddd;max-width:90%;margin-left:auto;margin-right:auto;}
     section{padding:80px 0;}
     .section-title{text-align:center;font-family:'Playfair Display',serif;font-size:2.4rem;margin-bottom:40px;}
     .section-title::after{content:'';display:block;width:80px;height:3px;background:var(--gold);margin:15px auto 0;}
     .cars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
-    .car-card{background:var(--dark);border-radius:10px;overflow:hidden;transition:.3s;border:1px solid #222;cursor:pointer;}
+    .car-card{background:var(--dark);border-radius:10px;overflow:hidden;transition:.3s;border:1px solid #222;text-decoration:none;color:white;position:relative;}
     .car-card:hover{transform:translateY(-6px);border-color:var(--gold);}
-    .car-image{height:180px;background:#222 center/cover;background-size:cover;}
+    .car-image{height:180px;background:#222 center/cover;position:relative;}
+    .banner{position:absolute;top:12px;left:0;background:#ffa500;color:black;padding:4px 12px;font-size:0.75rem;font-weight:700;letter-spacing:1px;}
+    .banner.sold{background:#ff4d4d;color:white;}
     .car-info{padding:16px;}
-    .car-info h3{font-size:1.1rem;margin-bottom:6px;}
-    .details{color:var(--gray);font-size:0.85rem;margin-bottom:10px;}
-    .price{color:var(--gold);font-size:1.4rem;font-weight:700;margin-bottom:12px;}
+    .details{color:var(--gray);font-size:0.85rem;margin:6px 0 10px;}
+    .price{color:var(--gold);font-size:1.4rem;font-weight:700;}
     footer{background:#050505;padding:40px 0;text-align:center;border-top:1px solid #222;}
     @media(max-width:768px){.hero h1{font-size:2.2rem;}.cars-grid{grid-template-columns:1fr;}}
   </style>
@@ -46,7 +46,7 @@
   <section class="hero">
     <div class="container">
       <h1>Vehículos Premium<br><span class="gold">Selección Nacional</span></h1>
-      <p>Selección exclusiva de coches nacionales verificados.<br>Transparencia total, calidad garantizada y atención personalizada.</p>
+      <p>Selección exclusiva de coches nacionales verificados.</p>
       <a href="#vehiculos" class="btn">Ver Vehículos</a>
     </div>
   </section>
@@ -63,7 +63,7 @@
       <div class="logo" style="margin-bottom:10px;">Cliff<span class="gold">Coches</span>.Net</div>
       <p>Selección exclusiva de coches nacionales verificados</p>
       <p style="margin-top:15px;color:#666;">© 2026 CliffCoches.Net</p>
-      <p style="margin-top:8px;"><a href="panel-control.html" style="color:#aaa;font-size:0.85rem;text-decoration:underline;">Área privada</a></p>
+      <p style="margin-top:8px;"><a href="panel-control.html" style="color:#aaa;font-size:0.85rem;">Área privada</a></p>
     </div>
   </footer>
 
@@ -73,24 +73,33 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZW9sb3ZoY3BxY3Via2FjaGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1OTQ2OTcsImV4cCI6MjExMDE3MDY5N30.ejphVuLjV64Pf84UZ1GB0vdwC98oyWQG2mhiNXo18Yw'
     );
 
+    function formatPrice(p) {
+      if (!p) return 'Consultar';
+      return Number(p).toLocaleString('es-ES') + ' €';
+    }
+
     async function loadCars() {
-      const { data, error } = await sb.from('vehicles').select('*').eq('status','available').order('created_at',{ascending:false});
+      const { data } = await sb.from('vehicles').select('*').in('status',['available','reserved']).order('created_at',{ascending:false});
       const container = document.getElementById('cars');
-      if (error || !data?.length) {
-        container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;">No hay vehículos disponibles en este momento.</p>';
+      if (!data?.length) {
+        container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#aaa;">No hay vehículos disponibles.</p>';
         return;
       }
-      container.innerHTML = data.map(car => `
-        <div class="car-card" onclick="window.open('https://wa.me/34613801086?text=Me%20interesa%20el%20${encodeURIComponent(car.title||car.brand+' '+car.model)}','_blank')">
-          <div class="car-image" style="background-image:url('${car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}')"></div>
-          <div class="car-info">
-            <h3>${car.title || car.brand + ' ' + car.model}</h3>
-            <div class="details">${car.year||''} • ${car.mileage ? car.mileage.toLocaleString()+' km' : ''} • ${car.fuel||''} • ${car.transmission||''}</div>
-            <div class="price">${car.price ? car.price.toLocaleString()+' €' : 'Consultar'}</div>
-            <span class="btn" style="padding:8px 16px;font-size:0.9rem;">Solicitar info</span>
-          </div>
-        </div>
-      `).join('');
+      container.innerHTML = data.map(car => {
+        const banner = car.status === 'reserved' ? '<div class="banner">RESERVADO</div>' : '';
+        return `
+          <a href="coche.html?id=${car.id}" class="car-card">
+            <div class="car-image" style="background-image:url('${car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}')">
+              ${banner}
+            </div>
+            <div class="car-info">
+              <h3>${car.title || car.brand + ' ' + car.model}</h3>
+              <div class="details">${car.year||''} • ${car.mileage ? Number(car.mileage).toLocaleString('es-ES')+' km' : ''} • ${car.fuel||''}</div>
+              <div class="price">${formatPrice(car.price)}</div>
+            </div>
+          </a>
+        `;
+      }).join('');
     }
     loadCars();
   </script>
