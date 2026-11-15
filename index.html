@@ -28,11 +28,54 @@
     
     .header-actions { display: flex; gap: 10px; align-items: center; }
     .btn-whatsapp-top { background: #25D366; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Estilos del Banner / Hero superior recuperado */
+    .hero-banner {
+      background: linear-gradient(rgba(10,10,10,0.85), rgba(10,10,10,0.92)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 20px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--white); margin-bottom: 4px; }
+    .hero-subtitle { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 16px; }
+    
+    .hero-card-desc {
+      background: rgba(20,20,20,0.85);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 650px;
+      margin: 0 auto 20px auto;
+      font-size: 0.92rem;
+      color: #ddd;
+      line-height: 1.6;
+    }
+
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: rgba(28,28,28,0.9);
+      border: 1px solid #333;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: #ccc;
+      font-weight: 500;
+    }
+
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--white); margin-bottom: 16px; }
     
     .search-bar { width: 100%; max-width: 400px; padding: 12px 16px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 8px; font-size: 0.95rem; margin-bottom: 24px; outline: none; }
     .search-bar:focus { border-color: var(--gold); }
 
-    .cars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .cars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 30px; }
     
     .car-card { 
       background: var(--card-bg); 
@@ -74,7 +117,7 @@
     .car-details { font-size: 0.85rem; color: var(--gray); margin-bottom: 12px; }
     .car-price { font-size: 1.25rem; font-weight: 700; color: var(--gold); margin-top: auto; }
 
-    .location-box { background: var(--dark); padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-top: 30px; text-align: center; color: var(--gray); font-size: 0.9rem; }
+    .location-box { background: var(--dark); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center; color: var(--gray); font-size: 0.9rem; margin-top: 20px; }
     .location-box a { color: var(--gold); text-decoration: none; font-weight: 600; }
   </style>
 </head>
@@ -87,6 +130,25 @@
       </div>
     </header>
 
+    <!-- Banner Superior (Hero) Recuperado -->
+    <div class="hero-banner">
+      <div class="hero-title">Vehículos Premium</div>
+      <div class="hero-subtitle">Selección Nacional</div>
+      
+      <div class="hero-card-desc">
+        Selección exclusiva de vehículos nacionales e importados verificados.<br><br>
+        <b>20 años de experiencia en Canadá.</b> Ahora en España.<br><br>
+        Asesoramiento personalizado, transparencia y atención directa.
+      </div>
+
+      <div class="trust-badges">
+        <div class="badge">✓ Verificados</div>
+        <div class="badge">★ 20 Años Exp.</div>
+        <div class="badge">🇨🇦 ➔ 🇪🇸 Importación</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Disponibles</h2>
     <input type="text" id="searchInput" class="search-bar" placeholder="Buscar por marca, modelo..." oninput="filterCars()">
 
     <div class="cars-grid" id="carsContainer">
@@ -94,8 +156,8 @@
     </div>
 
     <div class="location-box">
-      📍 Visítanos en <b>Av. del Segura, 80, 03390 Benejúzar, Alicante</b> • 
-      <a href="https://maps.google.com/?q=Av.+del+Segura,+80,+03390+Benejúzar,+Alicante" target="_blank">Ver en Google Maps</a>
+      📍 Visítanos en <b>Av. del Segura, 80, 03390 Benejúzar, Alicante</b><br><br>
+      <a href="https://maps.google.com/?q=Av.+del+Segura,+80,+03390+Benejúzar,+Alicante" target="_blank">🗺️ Ver ubicación interactiva en Google Maps</a>
     </div>
   </div>
 
