@@ -71,7 +71,6 @@
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
     }
 
-    /* Hero Section con imagen de fondo */
     .hero {
       min-height: auto;
       background: linear-gradient(to bottom, rgba(8,8,8,0.4), rgba(8,8,8,0.9)), 
@@ -94,7 +93,6 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
-    /* Recuadro con alta transparencia (efecto cristal casi invisible) */
     .hero-text {
       font-size: 0.88rem;
       color: #f0f0f0;
@@ -110,6 +108,26 @@
     }
 
     .hero-text p { margin: 4px 0; }
+
+    .discreet-trust-bar {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0,0,0,0.25);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
 
     section { padding: 30px 0; }
 
@@ -159,7 +177,6 @@
       padding-left: 6px;
     }
 
-    /* Cars Grid */
     .cars-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -234,7 +251,7 @@
 
     footer {
       background: #050505;
-      padding: 25px 0;
+      padding: 30px 0;
       text-align: center;
       border-top: 1px solid var(--border);
       color: var(--gray);
@@ -265,11 +282,16 @@
     <div class="container">
       <h1>Vehículos Premium<br><span class="gold">Selección Nacional</span></h1>
       
-      <!-- Recuadro súper transparente -->
       <div class="hero-text">
         <p>Selección exclusiva de vehículos nacionales e importados verificados.</p>
         <p><strong>20 años de experiencia en Canadá. Ahora en España.</strong></p>
         <p>Asesoramiento personalizado, transparencia y atención directa.</p>
+      </div>
+
+      <div class="discreet-trust-bar">
+        <div class="trust-item"><span style="color:var(--gold);">✓</span> Verificados</div>
+        <div class="trust-item"><span style="color:var(--gold);">★</span> 20 Años Exp.</div>
+        <div class="trust-item"><span style="color:var(--gold);">📍</span> <a href="https://maps.google.com/?q=Avenida+Del+Segura+80+03390+Benejuzar+Alicante" target="_blank" style="color:inherit;text-decoration:underline;">Ven a conocernos: Av. del Segura, 80 (Benejúzar)</a></div>
       </div>
     </div>
   </section>
@@ -291,7 +313,8 @@
     <div class="container">
       <div class="logo">Cliff<span>Coches</span>.Net</div>
       <p>Selección exclusiva de vehículos nacionales e importados</p>
-      <p style="margin-top:8px;color:#666;">© 2026 CliffCoches.Net</p>
+      <p style="margin-top:8px;color:#bbb;">📍 Exposición física: Av. del Segura, 80, 03390 Benejúzar, Alicante</p>
+      <p style="margin-top:10px;color:#666;">© 2026 CliffCoches.Net</p>
       <p style="margin-top:6px;"><a href="panel-control.html" style="color:#888;font-size:0.78rem;text-decoration:none;">Área privada</a></p>
     </div>
   </footer>
