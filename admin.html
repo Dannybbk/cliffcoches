@@ -44,6 +44,28 @@
     input, textarea, select { width: 100%; padding: 12px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; font-size: 0.95rem; outline: none; }
     input:focus, textarea:focus, select:focus { border-color: var(--gold); }
     
+    .file-upload-wrapper {
+      background: #1c1c1c;
+      border: 1px dashed #444;
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .file-upload-wrapper label {
+      display: block;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .file-upload-wrapper input {
+      border: none;
+      background: transparent;
+      padding: 0;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+
     .btn-primary { width: 100%; background: var(--gold); color: black; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin-top: 12px; }
     
     .car-item { background: var(--dark); padding: 16px; border-radius: 10px; border: 1px solid #222; margin: 10px 0; }
@@ -102,7 +124,13 @@
         <input class="form-full" id="phone" placeholder="Teléfono de contacto" value="+34613801086">
 
         <textarea class="form-full" id="description" placeholder="Descripción" rows="3"></textarea>
-        <input class="form-full" type="file" id="photo" accept="image/*">
+        
+        <!-- Selector múltiple de fotos -->
+        <div class="form-full file-upload-wrapper">
+          <label for="photos">📸 Seleccionar Fotos (Puedes elegir hasta 10-15 a la vez)</label>
+          <input type="file" id="photos" accept="image/*" multiple>
+          <small style="color:#888;display:block;margin-top:4px;">La primera foto seleccionada será la portada principal del coche.</small>
+        </div>
         
         <button class="btn-primary form-full" id="saveBtn" onclick="saveCar()">Publicar</button>
         <button class="btn-secondary form-full" id="cancelBtn" onclick="cancelEdit()" style="display:none;margin-top:8px;text-align:center;">Cancelar</button>
@@ -121,6 +149,7 @@
     );
 
     let editingId = null;
+    let existingImages = []; // Para conservar fotos anteriores si editamos sin subir nuevas
 
     async function init() {
       const { data } = await sb.auth.getSession();
@@ -166,13 +195,25 @@
       const price = document.getElementById('price').value;
       if (!brand || !model || !price) return alert('Marca, modelo y precio son obligatorios');
 
-      let image = null;
-      const file = document.getElementById('photo').files[0];
-      if (file) {
-        const name = Date.now() + '_' + file.name.replace(/[^a-z0-9.]/gi, '_');
-        const { error } = await sb.storage.from('Vehicles').upload(name, file);
-        if (error) return alert('Error foto: ' + error.message);
-        image = sb.storage.from('Vehicles').getPublicUrl(name).data.publicUrl;
+      const btn = document.getElementById('saveBtn');
+      btn.textContent = 'Subiendo imágenes y guardando...';
+      btn.disabled = true;
+
+      const fileInput = document.getElementById('photos');
+      let uploadedUrls = [...existingImages];
+
+      // Si el usuario ha seleccionado nuevas fotos, las subimos todas
+      if (fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+          const file = fileInput.files[i];
+          const fileName = Date.now() + '_' + i + '_' + file.name.replace(/[^a-z0-9.]/gi, '_');
+          const { error: uploadError } = await sb.storage.from('Vehicles').upload(fileName, file);
+          
+          if (!uploadError) {
+            const publicUrl = sb.storage.from('Vehicles').getPublicUrl(fileName).data.publicUrl;
+            uploadedUrls.push(publicUrl);
+          }
+        }
       }
 
       const car = {
@@ -187,7 +228,12 @@
         description: document.getElementById('description').value.trim(),
         status: 'available'
       };
-      if (image) car.main_image = image;
+
+      // Si tenemos fotos, guardamos la primera como principal y todas juntas como texto separado por comas en 'images'
+      if (uploadedUrls.length > 0) {
+        car.main_image = uploadedUrls[0];
+        car.images = uploadedUrls.join(',');
+      }
 
       let error;
       if (editingId) {
@@ -196,9 +242,12 @@
         ({ error } = await sb.from('vehicles').insert(car));
       }
 
+      btn.textContent = 'Publicar';
+      btn.disabled = false;
+
       if (error) alert('Error: ' + error.message);
       else {
-        alert(editingId ? 'Actualizado' : '¡Publicado!');
+        alert(editingId ? '¡Vehículo actualizado con éxito!' : '¡Vehículo publicado con éxito!');
         cancelEdit();
         loadCars();
       }
@@ -208,6 +257,16 @@
       const { data } = await sb.from('vehicles').select('*').eq('id', id).single();
       if (!data) return;
       editingId = id;
+      
+      // Guardar galería actual si existe
+      if (data.images) {
+        existingImages = typeof data.images === 'string' ? data.images.split(',').map(s => s.trim()) : data.images;
+      } else if (data.main_image) {
+        existingImages = [data.main_image];
+      } else {
+        existingImages = [];
+      }
+
       document.getElementById('formTitle').textContent = 'Editar Vehículo';
       document.getElementById('saveBtn').textContent = 'Guardar cambios';
       document.getElementById('cancelBtn').style.display = 'block';
@@ -226,6 +285,7 @@
 
     function cancelEdit() {
       editingId = null;
+      existingImages = [];
       document.getElementById('formTitle').textContent = 'Añadir Vehículo';
       document.getElementById('saveBtn').textContent = 'Publicar';
       document.getElementById('cancelBtn').style.display = 'none';
@@ -242,7 +302,7 @@
     }
 
     async function del(id) {
-      if (confirm('¿Borrar este coche?')) {
+      if (confirm('¿Estás seguro de borrar este coche?')) {
         await sb.from('vehicles').delete().eq('id', id);
         loadCars();
       }
