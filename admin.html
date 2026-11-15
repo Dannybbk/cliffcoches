@@ -104,69 +104,22 @@
         
         <select id="brand">
           <option value="">Selecciona Marca...</option>
-          <option>Abarth</option>
-          <option>Alfa Romeo</option>
-          <option>Aston Martin</option>
-          <option>Audi</option>
-          <option>Bentley</option>
-          <option>BMW</option>
-          <option>Bugatti</option>
-          <option>BYD</option>
-          <option>Cadillac</option>
-          <option>Chevrolet</option>
-          <option>Chrysler</option>
-          <option>Citroën</option>
-          <option>Cupra</option>
-          <option>Dacia</option>
-          <option>Daewoo</option>
-          <option>Daihatsu</option>
-          <option>Dodge</option>
-          <option>DS</option>
-          <option>Ferrari</option>
-          <option>Fiat</option>
-          <option>Ford</option>
-          <option>Honda</option><option>Hummer</option>
-          <option>Hyundai</option>
-          <option>Infiniti</option>
-          <option>Isuzu</option>
-          <option>Iveco</option>
-          <option>Jaguar</option>
-          <option>Jeep</option>
-          <option>Kia</option>
-          <option>KTM</option>
-          <option>Lada</option>
-          <option>Lamborghini</option>
-          <option>Lancia</option>
-          <option>Land Rover</option>
-          <option>Lexus</option>
-          <option>Lotus</option>
-          <option>Maserati</option>
-          <option>Maybach</option>
-          <option>Mazda</option>
-          <option>McLaren</option>
-          <option>Mercedes-Benz</option>
-          <option>MG</option>
-          <option>MINI</option>
-          <option>Mitsubishi</option>
-          <option>Nissan</option>
-          <option>Opel</option>
-          <option>Peugeot</option>
-          <option>Pontiac</option>
-          <option>Porsche</option>
-          <option>Renault</option>
-          <option>Rolls-Royce</option>
-          <option>Rover</option>
-          <option>Saab</option>
-          <option>Seat</option>
-          <option>Skoda</option>
-          <option>Smart</option>
-          <option>Subaru</option>
-          <option>Suzuki</option>
-          <option>Tesla</option>
-          <option>Toyota</option>
-          <option>Volkswagen</option>
-          <option>Volvo</option>
-          <option>Otro</option>
+          <option>Abarth</option><option>Alfa Romeo</option><option>Aston Martin</option><option>Audi</option>
+          <option>Bentley</option><option>BMW</option><option>Bugatti</option><option>BYD</option>
+          <option>Cadillac</option><option>Chevrolet</option><option>Chrysler</option><option>Citroën</option>
+          <option>Cupra</option><option>Dacia</option><option>Daewoo</option><option>Daihatsu</option>
+          <option>Dodge</option><option>DS</option><option>Ferrari</option><option>Fiat</option>
+          <option>Ford</option><option>Honda</option><option>Hummer</option><option>Hyundai</option>
+          <option>Infiniti</option><option>Isuzu</option><option>Iveco</option><option>Jaguar</option>
+          <option>Jeep</option><option>Kia</option><option>KTM</option><option>Lada</option>
+          <option>Lamborghini</option><option>Lancia</option><option>Land Rover</option><option>Lexus</option>
+          <option>Lotus</option><option>Maserati</option><option>Maybach</option><option>Mazda</option>
+          <option>McLaren</option><option>Mercedes-Benz</option><option>MG</option><option>MINI</option>
+          <option>Mitsubishi</option><option>Nissan</option><option>Opel</option><option>Peugeot</option>
+          <option>Pontiac</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option>
+          <option>Rover</option><option>Saab</option><option>Seat</option><option>Skoda</option>
+          <option>Smart</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option>
+          <option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Otro</option>
         </select>
         
         <input id="model" placeholder="Modelo">
@@ -181,9 +134,8 @@
 
         <textarea class="form-full" id="description" placeholder="Descripción" rows="3"></textarea>
         
-        <!-- Selector múltiple de fotos (hasta 10-15) -->
         <div class="form-full file-upload-wrapper">
-          <label for="photos">📸 Seleccionar Fotos (Puedes elegir hasta 10-15 a la vez)</label>
+          <label for="photos">📸 Seleccionar Fotos (Hasta 10-15 a la vez)</label>
           <input type="file" id="photos" accept="image/*" multiple>
           <small style="color:#888;display:block;margin-top:4px;">La primera foto seleccionada será la portada principal del coche.</small>
         </div>
@@ -286,7 +238,8 @@
 
       if (uploadedUrls.length > 0) {
         car.main_image = uploadedUrls[0];
-        car.images = uploadedUrls.join(',');
+        // Formatear correctamente como array de Postgres para evitar errores de tipo
+        car.images = '{' + uploadedUrls.join(',') + '}';
       }
 
       let error;
@@ -313,7 +266,12 @@
       editingId = id;
       
       if (data.images) {
-        existingImages = typeof data.images === 'string' ? data.images.split(',').map(s => s.trim()) : data.images;
+        if (Array.isArray(data.images)) {
+          existingImages = data.images;
+        } else if (typeof data.images === 'string') {
+          let clean = data.images.replace(/^\{|\}$/g, '');
+          existingImages = clean ? clean.split(',').map(s => s.trim()) : [];
+        }
       } else if (data.main_image) {
         existingImages = [data.main_image];
       } else {
