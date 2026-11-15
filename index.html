@@ -204,8 +204,18 @@
 
     .car-image {
       height: 200px;
-      background: #151515 center/cover no-repeat;
+      background: #151515;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .car-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
 
     .banner {
@@ -219,6 +229,7 @@
       font-weight: 700;
       border-radius: 4px;
       text-transform: uppercase;
+      z-index: 2;
     }
 
     .banner.sold { background: #ff4d4d; }
@@ -291,7 +302,7 @@
       <div class="discreet-trust-bar">
         <div class="trust-item"><span style="color:var(--gold);">✓</span> Verificados</div>
         <div class="trust-item"><span style="color:var(--gold);">★</span> 20 Años Exp.</div>
-        <div class="trust-item"><span style="color:var(--gold);">📍</span> <a href="https://maps.google.com/?q=Avenida+Del+Segura+80+03390+Benejuzar+Alicante" target="_blank" style="color:inherit;text-decoration:underline;">Ven a conocernos: Av. del Segura, 80 (Benejúzar)</a>[span_0](start_span)[span_0](end_span)</div>
+        <div class="trust-item"><span style="color:var(--gold);">📍</span> <a href="https://maps.google.com/?q=Avenida+Del+Segura+80+03390+Benejuzar+Alicante" target="_blank" style="color:inherit;text-decoration:underline;">Ven a conocernos: Av. del Segura, 80 (Benejúzar)</a></div>
       </div>
     </div>
   </section>
@@ -313,7 +324,7 @@
     <div class="container">
       <div class="logo">Cliff<span>Coches</span>.Net</div>
       <p>Selección exclusiva de vehículos nacionales e importados</p>
-      <p style="margin-top:8px;color:#bbb;">📍 Exposición física: Av. del Segura, 80, 03390 Benejúzar, Alicante</p>[span_1](start_span)[span_1](end_span)
+      <p style="margin-top:8px;color:#bbb;">📍 Exposición física: Av. del Segura, 80, 03390 Benejúzar, Alicante</p>
       <p style="margin-top:10px;color:#666;">© 2026 CliffCoches.Net</p>
       <p style="margin-top:6px;"><a href="panel-control.html" style="color:#888;font-size:0.78rem;text-decoration:none;">Área privada</a></p>
     </div>
@@ -349,10 +360,12 @@
         if (car.status === 'reserved') banner = '<div class="banner">RESERVADO</div>';
         if (car.status === 'sold') banner = '<div class="banner sold">VENDIDO</div>';
         const carTitle = car.title || (car.brand + ' ' + car.model);
+        const imgSrc = car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
         return `
           <a href="coche.html?id=${car.id}" class="car-card">
-            <div class="car-image" style="background-image:url('${car.main_image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}')">
+            <div class="car-image">
               ${banner}
+              <img src="${imgSrc}" alt="${carTitle}">
             </div>
             <div class="car-info">
               <h3>${carTitle}</h3>
