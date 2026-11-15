@@ -104,13 +104,69 @@
         
         <select id="brand">
           <option value="">Selecciona Marca...</option>
-          <option>Abarth</option><option>Alfa Romeo</option><option>Audi</option><option>BMW</option>
-          <option>Citroën</option><option>Cupra</option><option>Dacia</option><option>Fiat</option>
-          <option>Ford</option><option>Honda</option><option>Hyundai</option><option>Jeep</option>
-          <option>Kia</option><option>Land Rover</option><option>Mazda</option><option>Mercedes-Benz</option>
-          <option>MINI</option><option>Nissan</option><option>Opel</option><option>Peugeot</option>
-          <option>Renault</option><option>Seat</option><option>Skoda</option><option>Tesla</option>
-          <option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Otro</option>
+          <option>Abarth</option>
+          <option>Alfa Romeo</option>
+          <option>Aston Martin</option>
+          <option>Audi</option>
+          <option>Bentley</option>
+          <option>BMW</option>
+          <option>Bugatti</option>
+          <option>BYD</option>
+          <option>Cadillac</option>
+          <option>Chevrolet</option>
+          <option>Chrysler</option>
+          <option>Citroën</option>
+          <option>Cupra</option>
+          <option>Dacia</option>
+          <option>Daewoo</option>
+          <option>Daihatsu</option>
+          <option>Dodge</option>
+          <option>DS</option>
+          <option>Ferrari</option>
+          <option>Fiat</option>
+          <option>Ford</option>
+          <option>Honda</option><option>Hummer</option>
+          <option>Hyundai</option>
+          <option>Infiniti</option>
+          <option>Isuzu</option>
+          <option>Iveco</option>
+          <option>Jaguar</option>
+          <option>Jeep</option>
+          <option>Kia</option>
+          <option>KTM</option>
+          <option>Lada</option>
+          <option>Lamborghini</option>
+          <option>Lancia</option>
+          <option>Land Rover</option>
+          <option>Lexus</option>
+          <option>Lotus</option>
+          <option>Maserati</option>
+          <option>Maybach</option>
+          <option>Mazda</option>
+          <option>McLaren</option>
+          <option>Mercedes-Benz</option>
+          <option>MG</option>
+          <option>MINI</option>
+          <option>Mitsubishi</option>
+          <option>Nissan</option>
+          <option>Opel</option>
+          <option>Peugeot</option>
+          <option>Pontiac</option>
+          <option>Porsche</option>
+          <option>Renault</option>
+          <option>Rolls-Royce</option>
+          <option>Rover</option>
+          <option>Saab</option>
+          <option>Seat</option>
+          <option>Skoda</option>
+          <option>Smart</option>
+          <option>Subaru</option>
+          <option>Suzuki</option>
+          <option>Tesla</option>
+          <option>Toyota</option>
+          <option>Volkswagen</option>
+          <option>Volvo</option>
+          <option>Otro</option>
         </select>
         
         <input id="model" placeholder="Modelo">
@@ -125,7 +181,7 @@
 
         <textarea class="form-full" id="description" placeholder="Descripción" rows="3"></textarea>
         
-        <!-- Selector múltiple de fotos -->
+        <!-- Selector múltiple de fotos (hasta 10-15) -->
         <div class="form-full file-upload-wrapper">
           <label for="photos">📸 Seleccionar Fotos (Puedes elegir hasta 10-15 a la vez)</label>
           <input type="file" id="photos" accept="image/*" multiple>
@@ -149,7 +205,7 @@
     );
 
     let editingId = null;
-    let existingImages = []; // Para conservar fotos anteriores si editamos sin subir nuevas
+    let existingImages = [];
 
     async function init() {
       const { data } = await sb.auth.getSession();
@@ -202,7 +258,6 @@
       const fileInput = document.getElementById('photos');
       let uploadedUrls = [...existingImages];
 
-      // Si el usuario ha seleccionado nuevas fotos, las subimos todas
       if (fileInput.files.length > 0) {
         for (let i = 0; i < fileInput.files.length; i++) {
           const file = fileInput.files[i];
@@ -229,7 +284,6 @@
         status: 'available'
       };
 
-      // Si tenemos fotos, guardamos la primera como principal y todas juntas como texto separado por comas en 'images'
       if (uploadedUrls.length > 0) {
         car.main_image = uploadedUrls[0];
         car.images = uploadedUrls.join(',');
@@ -258,7 +312,6 @@
       if (!data) return;
       editingId = id;
       
-      // Guardar galería actual si existe
       if (data.images) {
         existingImages = typeof data.images === 'string' ? data.images.split(',').map(s => s.trim()) : data.images;
       } else if (data.main_image) {
