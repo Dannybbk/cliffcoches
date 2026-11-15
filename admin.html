@@ -11,15 +11,43 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); padding: 20px; }
     .container { max-width: 960px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: center; background: var(--dark); padding: 16px 24px; border-radius: 12px; border: 1px solid #222; margin-bottom: 24px; }
+    
+    /* Cabecera optimizada para evitar que los botones se monten en móvil */
+    header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: var(--dark); 
+      padding: 16px 24px; 
+      border-radius: 12px; 
+      border: 1px solid #222; 
+      margin-bottom: 24px; 
+      gap: 15px;
+      flex-wrap: wrap;
+    }
     h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.6rem; }
-    .btn-secondary { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; }
-    .btn-danger { background: rgba(255,77,77,0.1); border: 1px solid var(--red); color: var(--red); padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+    
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-danger { background: rgba(255,77,77,0.1); border: 1px solid var(--red); color: var(--red); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; }
+    
     .card { background: var(--dark); padding: 24px; border-radius: 12px; border: 1px solid #222; margin-bottom: 24px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    
+    /* Grid de dos columnas estilo PC adaptado a móvil */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .form-full { grid-column: 1 / -1; }
-    input, textarea, select { width: 100%; padding: 12px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; font-size: 0.95rem; }
+    
+    input, textarea, select { width: 100%; padding: 12px 14px; background: #1c1c1c; border: 1px solid #333; color: white; border-radius: 6px; font-size: 0.95rem; outline: none; }
+    input:focus, textarea:focus, select:focus { border-color: var(--gold); }
+    
     .btn-primary { width: 100%; background: var(--gold); color: black; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin-top: 12px; }
+    
     .car-item { background: var(--dark); padding: 16px; border-radius: 10px; border: 1px solid #222; margin: 10px 0; }
     .car-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
     .status { font-size: 0.75rem; padding: 3px 8px; border-radius: 20px; font-weight: 600; }
@@ -32,24 +60,29 @@
     .btn-reserve { background: rgba(255,165,0,0.15); border: 1px solid #ffa500; color: #ffa500; }
     .btn-sold { background: rgba(255,77,77,0.15); border: 1px solid #ff4d4d; color: #ff4d4d; }
     .btn-del { background: rgba(255,77,77,0.1); border: 1px solid #ff4d4d; color: #ff4d4d; }
-    @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
+    
+    @media (max-width: 700px) { 
+      .form-grid { grid-template-columns: 1fr; } 
+      .form-full { grid-column: 1 / -1; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>Panel Admin</h1>
-      <div>
+      <div class="header-actions">
         <a href="index.html" class="btn-secondary">Ver Web</a>
         <button onclick="logout()" class="btn-danger">Cerrar sesión</button>
       </div>
     </header>
 
     <div class="card">
-      <h2 id="formTitle" style="margin-bottom:16px;">Añadir Vehículo</h2>
+      <h2 id="formTitle" style="margin-bottom:16px;font-family:'Playfair Display',serif;color:var(--gold);">Añadir Vehículo</h2>
       <div class="form-grid">
         <input class="form-full" id="title" placeholder="Título opcional">
-        <select id="brand" class="form-full">
+        
+        <select id="brand">
           <option value="">Selecciona Marca...</option>
           <option>Abarth</option><option>Alfa Romeo</option><option>Audi</option><option>BMW</option>
           <option>Citroën</option><option>Cupra</option><option>Dacia</option><option>Fiat</option>
@@ -59,20 +92,22 @@
           <option>Renault</option><option>Seat</option><option>Skoda</option><option>Tesla</option>
           <option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Otro</option>
         </select>
+        
         <input id="model" placeholder="Modelo">
         <input id="year" type="number" placeholder="Año">
         <input id="price" type="number" placeholder="Precio (ej: 49500)">
         <input id="km" type="number" placeholder="Kilómetros">
+        
         <select id="fuel"><option>Diésel</option><option>Gasolina</option><option>Híbrido</option><option>Eléctrico</option></select>
         <select id="transmission"><option>Automático</option><option>Manual</option></select>
         
-        <!-- CAMPO DE TELÉFONO AÑADIDO -->
-        <input class="form-full" id="phone" placeholder="Teléfono de contacto (ej: +34 600 000 000)" value="+34613801086">
+        <input class="form-full" id="phone" placeholder="Teléfono de contacto" value="+34613801086">
 
-        <textarea class="form-full" id="description" placeholder="Descripción" rows="2"></textarea>
+        <textarea class="form-full" id="description" placeholder="Descripción" rows="3"></textarea>
         <input class="form-full" type="file" id="photo" accept="image/*">
+        
         <button class="btn-primary form-full" id="saveBtn" onclick="saveCar()">Publicar</button>
-        <button class="btn-secondary form-full" id="cancelBtn" onclick="cancelEdit()" style="display:none;margin-top:8px;">Cancelar</button>
+        <button class="btn-secondary form-full" id="cancelBtn" onclick="cancelEdit()" style="display:none;margin-top:8px;text-align:center;">Cancelar</button>
       </div>
     </div>
 
@@ -150,7 +185,7 @@
         mileage: parseInt(document.getElementById('km').value) || null,
         fuel: document.getElementById('fuel').value,
         transmission: document.getElementById('transmission').value,
-        phone: document.getElementById('phone').value.trim(), // Guardamos el teléfono introducido
+        phone: document.getElementById('phone').value.trim(),
         description: document.getElementById('description').value.trim(),
         status: 'available'
       };
@@ -186,7 +221,7 @@
       document.getElementById('km').value = data.mileage || '';
       document.getElementById('fuel').value = data.fuel || 'Diésel';
       document.getElementById('transmission').value = data.transmission || 'Automático';
-      document.getElementById('phone').value = data.phone || '+34613801086'; // Cargamos el teléfono guardado
+      document.getElementById('phone').value = data.phone || '+34613801086';
       document.getElementById('description').value = data.description || '';
       window.scrollTo(0,0);
     }
