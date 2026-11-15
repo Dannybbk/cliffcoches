@@ -71,7 +71,7 @@
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
     }
 
-    /* Hero Section */
+    /* Hero Section compacta y limpia */
     .hero {
       min-height: auto;
       background: linear-gradient(to bottom, rgba(8,8,8,0.75), rgba(8,8,8,0.96)), 
@@ -81,94 +81,92 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 100px 16px 50px;
+      padding: 90px 16px 30px;
       border-bottom: 1px solid var(--border);
     }
 
     .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      margin-bottom: 15px;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
       line-height: 1.2;
       font-weight: 700;
     }
 
     .hero-text {
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #d1d1d1;
-      max-width: 600px;
-      margin: 0 auto 20px;
-      line-height: 1.6;
+      max-width: 550px;
+      margin: 0 auto 15px;
+      line-height: 1.5;
       background: rgba(20, 20, 20, 0.75);
-      padding: 18px;
+      padding: 14px 16px;
       border-radius: 10px;
       border: 1px solid var(--border);
       backdrop-filter: blur(8px);
     }
 
-    .hero-text p { margin: 4px 0; }
+    .hero-text p { margin: 3px 0; }
 
-    /* Barra de compromisos discreta en línea horizontal */
+    /* Barra horizontal súper discreta en fila */
     .discreet-trust-bar {
       display: flex;
       justify-content: center;
-      gap: 25px;
+      gap: 15px;
       flex-wrap: wrap;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 30px;
-      border: 1px solid var(--border);
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--gray);
     }
 
     .trust-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: var(--gray);
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 5px 10px;
+      border-radius: 15px;
+      border: 1px solid var(--border);
     }
 
-    .trust-item span {
-      color: var(--gold);
-    }
+    .trust-item span { color: var(--gold); }
 
-    section { padding: 40px 0; }
+    section { padding: 30px 0; }
 
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 12px;
     }
 
     .section-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       position: relative;
     }
 
     .section-title::after {
       content: '';
       display: block;
-      width: 40px;
+      width: 35px;
       height: 3px;
       background: var(--gold);
-      margin: 8px 0 0;
+      margin: 6px 0 0;
       border-radius: 2px;
     }
 
     .search-box {
       background: var(--dark);
       border: 1px solid var(--border);
-      padding: 8px 14px;
+      padding: 6px 12px;
       border-radius: 30px;
       display: flex;
       align-items: center;
       width: 100%;
-      max-width: 280px;
+      max-width: 260px;
     }
 
     .search-box input {
@@ -176,7 +174,7 @@
       border: none;
       outline: none;
       color: var(--white);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       width: 100%;
       padding-left: 6px;
     }
@@ -256,21 +254,22 @@
 
     footer {
       background: #050505;
-      padding: 30px 0;
+      padding: 25px 0;
       text-align: center;
       border-top: 1px solid var(--border);
       color: var(--gray);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
 
-    footer .logo { font-size: 1.2rem; margin-bottom: 8px; display: inline-block; }
+    footer .logo { font-size: 1.1rem; margin-bottom: 6px; display: inline-block; }
 
     @media (min-width: 768px) {
-      .hero { padding: 140px 20px 60px; min-height: 65vh; }
-      .hero h1 { font-size: 2.8rem; }
-      .hero-text { font-size: 1.02rem; padding: 22px; }
+      .hero { padding: 130px 20px 50px; }
+      .hero h1 { font-size: 2.6rem; }
+      .hero-text { font-size: 1rem; padding: 20px; max-width: 600px; }
+      .discreet-trust-bar { font-size: 0.85rem; gap: 20px; }
       .cars-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-      section { padding: 60px 0; }
+      section { padding: 50px 0; }
     }
   </style>
 </head>
@@ -292,11 +291,11 @@
         <p>Asesoramiento personalizado, transparencia y atención directa.</p>
       </div>
 
-      <!-- Barra discreta de confianza -->
+      <!-- Barra horizontal en línea muy discreta -->
       <div class="discreet-trust-bar">
-        <div class="trust-item"><span>✓</span> Vehículos Verificados</div>
-        <div class="trust-item"><span>★</span> 20 Años de Experiencia</div>
-        <div class="trust-item"><span>🎯</span> Importación a la Carta</div>
+        <div class="trust-item"><span>✓</span> Verificados</div>
+        <div class="trust-item"><span>★</span> 20 Años Exp.</div>
+        <div class="trust-item"><span>🎯</span> Importación</div>
       </div>
     </div>
   </section>
@@ -318,8 +317,8 @@
     <div class="container">
       <div class="logo">Cliff<span>Coches</span>.Net</div>
       <p>Selección exclusiva de vehículos nacionales e importados</p>
-      <p style="margin-top:10px;color:#666;">© 2026 CliffCoches.Net</p>
-      <p style="margin-top:8px;"><a href="panel-control.html" style="color:#888;font-size:0.8rem;text-decoration:none;">Área privada</a></p>
+      <p style="margin-top:8px;color:#666;">© 2026 CliffCoches.Net</p>
+      <p style="margin-top:6px;"><a href="panel-control.html" style="color:#888;font-size:0.78rem;text-decoration:none;">Área privada</a></p>
     </div>
   </footer>
 
