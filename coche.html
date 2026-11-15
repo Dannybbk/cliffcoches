@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #141414; --white: #fff; --gray: #888; }
+    :root { --gold: #D4AF37; --black: #0A0A0A; --dark: #141414; --white: #fff; --gray: #888; --border: #222; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); padding: 20px; }
     .container { max-width: 800px; margin: 0 auto; }
@@ -19,30 +19,38 @@
       background: var(--dark); 
       padding: 16px 24px; 
       border-radius: 12px; 
-      border: 1px solid #222; 
+      border: 1px solid var(--border); 
       margin-bottom: 24px; 
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
     h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.5rem; }
-    .btn-back { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
+    .btn-back { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: background 0.2s; }
+    .btn-back:hover { background: rgba(212,175,55,0.1); }
 
-    .card { background: var(--dark); padding: 24px; border-radius: 12px; border: 1px solid #222; }
+    .card { 
+      background: var(--dark); 
+      padding: 24px; 
+      border-radius: 16px; 
+      border: 1px solid var(--border); 
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    }
     
     .main-img {
       width: 100%;
       height: 420px;
       background: #0A0A0A center/cover no-repeat;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-bottom: 12px;
-      border: 1px solid #222;
+      border: 1px solid var(--border);
     }
 
-    .thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 20px; }
+    .thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 24px; }
     .thumb { 
       width: 80px; 
       height: 60px; 
       background-size: cover; 
       background-position: center; 
-      border-radius: 6px; 
+      border-radius: 8px; 
       cursor: pointer; 
       flex-shrink: 0; 
       border: 2px solid transparent; 
@@ -50,35 +58,51 @@
     }
     .thumb.active { border-color: var(--gold); }
 
-    .car-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--white); margin-bottom: 8px; }
-    .car-price { font-size: 1.6rem; font-weight: 700; color: var(--gold); margin-bottom: 16px; }
+    .car-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--white); margin-bottom: 6px; }
+    .car-price { font-size: 1.6rem; font-weight: 700; color: var(--gold); margin-bottom: 20px; }
     
     .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-    .spec-item { background: #1c1c1c; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2c; }
+    .spec-item { background: #1c1c1c; padding: 12px; border-radius: 10px; border: 1px solid #2c2c2c; }
     .spec-label { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; margin-bottom: 4px; }
-    .spec-value { font-size: 0.95rem; font-weight: 600; }
+    .spec-value { font-size: 0.95rem; font-weight: 600; color: var(--white); }
 
+    .description-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); margin-bottom: 8px; }
     .description { color: #ccc; line-height: 1.6; margin-bottom: 24px; white-space: pre-line; font-size: 0.95rem; }
 
-    .btn-whatsapp { 
-      display: block; 
+    /* Botones de acción finos y elegantes lado a lado */
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-action { 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       width: 100%; 
-      background: #25D366; 
       color: white; 
       text-align: center; 
-      padding: 14px; 
+      padding: 11px 14px; 
       border-radius: 8px; 
       text-decoration: none; 
-      font-weight: 700; 
-      font-size: 1rem;
+      font-weight: 600; 
+      font-size: 0.85rem;
       transition: opacity 0.2s;
+      border: none;
+      cursor: pointer;
     }
-    .btn-whatsapp:hover { opacity: 0.9; }
+    .btn-whatsapp { background: #25D366; }
+    .btn-phone { background: #1c1c1c; border: 1px solid var(--gold); color: var(--gold); }
+    .btn-action:hover { opacity: 0.9; }
 
     @media (max-width: 600px) {
       .main-img { height: 260px; }
       body { padding: 12px; }
       .card { padding: 16px; }
+      .action-buttons { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -168,11 +192,17 @@
           </div>
         </div>
 
+        <div class="description-title">Descripción y Equipamiento</div>
         <div class="description">${c.description || 'Sin descripción adicional.'}</div>
 
-        <a href="https://wa.me/${cleanPhone}?text=${waMsg}" target="_blank" class="btn-whatsapp">
-          💬 Consultar por WhatsApp
-        </a>
+        <div class="action-buttons">
+          <a href="https://wa.me/${cleanPhone}?text=${waMsg}" target="_blank" class="btn-action btn-whatsapp">
+            💬 WhatsApp
+          </a>
+          <button class="btn-action btn-phone" onclick="revealPhone(this, '${phone}')">
+            📞 Ver Teléfono
+          </button>
+        </div>
       `;
     }
 
@@ -180,6 +210,11 @@
       document.getElementById('mainImageDisplay').style.backgroundImage = `url('${url}')`;
       document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
       element.classList.add('active');
+    }
+
+    function revealPhone(btn, phoneNum) {
+      btn.innerHTML = `📞 <a href="tel:${phoneNum}" style="color:var(--gold);text-decoration:none;font-weight:bold;">${phoneNum}</a>`;
+      btn.onclick = null;
     }
 
     loadCar();
